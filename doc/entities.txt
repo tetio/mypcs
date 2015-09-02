@@ -1,0 +1,80 @@
+company
+	id
+	code
+	name
+	primary_contact
+		title
+		first_name
+		middle_name
+		last_name
+		home_phone
+		mobile_phone
+		address_title
+		address
+		city
+		region
+		postal_code
+		country
+		phone
+		fax		
+	web
+	email
+	address_title
+	address
+	city
+	region
+	postal_code
+	country
+	phone
+	fax
+	services: [{service, valid_from, valid_to}]
+	situation
+	date_of_mofication
+
+user
+	id
+	username
+	password
+	company_id
+	roles: [role]
+	situation
+	date_of_mofication
+
+service
+	id
+	description
+
+activity
+	id
+	description
+	
+role
+	id
+	description
+
+vessel
+	id
+	name
+	call_sign
+	mmsi
+	imo
+	situation
+	date_of_mofication
+	
+call
+	id
+	port_call_number
+	vessel	
+	eta
+	etd
+	state
+	
+	
+file
+	id
+		
+	equipments:[]
+	goods:[]
+	
+
+	
