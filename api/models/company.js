@@ -11,14 +11,7 @@ var CompanySchema = new mongoose.Schema({
       mobile: String,
       phone_home: String,
       email: String,
-      address_title: String,
-      address: String,
-      city: String,
-      region: String,
-      postal_code: String,
-      country: String,
-      fax: String      
-    },    
+    },
     web: String,
     email: String,
     address_title: String,
@@ -36,7 +29,7 @@ var CompanySchema = new mongoose.Schema({
       valid_from: Date,
       valid_to: Date
     }]
-    
+
 });
 
 module.exports = mongoose.model('Company', CompanySchema);
