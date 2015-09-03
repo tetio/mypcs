@@ -15,8 +15,18 @@ function UserHandler() {
         });
     }
 
+    this.findByUsername = function (username, next) {
+        User.find({username: username}, function (err, user) {
+            if (err) {
+                next(err);
+            }
+            next(null, user);
+        });
+    }
+
+
     this.find = function (next) {
-        User.findById(function (err, users) {
+        User.find(function (err, users) {
             if (err) {
                 next(err);
             }
@@ -32,12 +42,37 @@ function UserHandler() {
             next(null, users);
         });
     }
-
-    this.create = function (company, next) {
+    // companyCode tells which company user belongs to
+    this.create = function (companyCode, next) {
         var user = new User();
-        user.username
+        var username = chance.first()+chance.last();
+        user.username = username.toLocaleLowerCase();
+        user.password = chance.word({ length: 10 });
+        user.company_code = companyCode;
+        user.situation = 'A';
+        user.last_modification = new Date();
+
+        user.save(function (err) {
+            if (err) {
+                next(err);
+            }
+            next(null, user);
+        });
     }
 
+
+    this.create = function (username, json, next) {
+        var user = User(json);
+        if (user.username == username) {
+            user.last_modification = new Date();
+            User.update({usermame: username}, user, {upsert: false}, function(err) {
+                if (err) {
+                    next(err);
+                }
+                next(null, user);
+            });
+        }
+    }
 }
 
 module.exports = UserHandler;

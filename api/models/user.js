@@ -1,9 +1,11 @@
+// var bcrypt = require('bcrypt-nodejs');
+
 var mongoose = require("mongoose");
 
 var UserSchema = new mongoose.Schema({
     username: String,
     password: String,
-  	company_id: String,
+  	company_code: String,
     situation: String,
     last_modification: Date,
     services: [{
@@ -12,5 +14,14 @@ var UserSchema = new mongoose.Schema({
       valid_to: Date
     }]
 });
+
+UserSchema.methods.toJSON = function () {
+    var user = this.toObject();
+    delete user.password;
+    delete user.__v;
+
+    return user;
+};
+
 
 module.exports = mongoose.model('User', UserSchema);

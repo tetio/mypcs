@@ -7,6 +7,8 @@ var router = express.Router();
 // Handlers
 var CompanyHandler = require('./handlers/companyHandler');
 var companyHandler = new CompanyHandler();
+var UserHandler = require('./handlers/userHandler');
+var userHandler = new UserHandler();
 
 // Mongo and Mongoose
 var mongoose = require('mongoose');
@@ -71,7 +73,43 @@ router.route('/company/:company_id')
     });
 
 
+// User routes
+router.route('/user')
+    .get(function(req, res) {
+        userHandler.find(function(err, users) {
+            if (err) {
+                res.send(err);
+            }
+           res.json(users);
+        });
+    })
+    .post(function (req, res) {
+        var companyCode = req.body.company_code;
+        userHandler.create(companyCode, function(err, user) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(user);
+        })
+    });
+router.route('/company/:username')
+    .get(function(req, res) {
+        companyHandler.findByUsername(req.params.username, function(err, user) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(user);
+        });
+    })
+    .put(function(req, res) {
+        userHandler.update(req.params.username, req.body, function(err, user) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(user);
+        });
+    });
 app.use('/api', router);
 
 app.listen(myPort);
-console.log('mypcs api is listening on port '+myPort);
+console.log('mypcs api is listening on port ' + myPort);
