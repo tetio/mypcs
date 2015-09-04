@@ -1,0 +1,42 @@
+<form class="form-horizontal" role="form">
+	<fieldset>
+		<legend>General information</legend>
+		<div class="form-group">
+			<label class="col-sm-3 control-label" for="name">Name</label>
+			<div class="col-sm-9">
+				<input type="text" ng-model="vm.name" class="form-control"/>
+			</div>
+		</div>	
+		<div class="form-group">
+			<label class="col-sm-3 control-label" for="surname">Surname</label>
+			<div class="col-sm-9">
+				<input type="text" ng-model="vm.surname" class="form-control"/>
+			</div>
+		</div>	
+	</fieldset>
+	<fieldset>
+		<legend>User configuration</legend>
+		<div class="form-group">
+			<span class="col-sm-offset-3 col-sm-9"><label>User type</label></span>
+			<div class="col-sm-offset-3 col-sm-9" ng-init="vm.userType = vm.selectedUserType || 0">
+				<div class="radio">
+					<label><input type="radio" ng-model="vm.userType" name="userType" value="0"/>User</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" ng-model="vm.userType" name="userType" value="1"/>Administrator</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label" for="section">Section</label>
+			<div class="col-sm-9">
+				<select name="section" ng-model="vm.section" ng-init="vm.section = vm.sections[vm.selectedSection] || vm.sections[0]"  ng-options="sect.name for sect in vm.sections" class="form-control"></select>
+			</div>
+		</div>
+	</fieldset>
+	<br/>
+	<div class="col-sm-offset-3 col-sm-9"><input type="submit" class="btn btn-primary" ng-click="vm.submit()" value="Register" /></div>
+	</form>
+	<br/>
+	<div class="col-sm-offset-3 col-sm-9"><span>{{vm.message}}</span></div>	
+</form>	

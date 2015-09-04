@@ -1,0 +1,40 @@
+<div class="panel panel-primary">
+    <div class="panel-heading"
+         style="font-size:large">Company List
+    </div>
+
+    <div class="panel-body">
+        <table class="table">
+
+            <thead>
+            <tr>
+                <td>
+                </td>
+                <td>Company</td>
+                <td>Code</td>
+                <td>Situation</td>
+                <td>Last modified</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="company in vm.companies">
+                <td>
+                </td>
+                <td>
+                    <a ui-sref="companyDetail({companyId: company.companyId})">
+                    {{ company.name}}</a>
+                </td>
+                <td>{{ company.code }}</td>
+                <td>{{ company.sitation }}</td>
+                <td>{{ company.last_modification}}</td>
+                <td>
+                    <a class="btn btn-primary"
+                       ui-sref="companyEdit.info({companyId: company.companyId})">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

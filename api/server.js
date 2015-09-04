@@ -26,7 +26,9 @@ var myPort = process.env.PORT || 6161;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     // do logging
     console.log('Something is happening.');
     next(); // make sure we go to the next routes and don't stop here
