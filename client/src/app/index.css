@@ -12,3 +12,9 @@
 .thumbnail img.pull-right {
   width: 50px;
 }
+
+
+.myGrid {
+    width: 900px;
+    height: 450px;
+  }
