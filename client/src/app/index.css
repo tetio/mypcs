@@ -18,3 +18,7 @@
     width: 900px;
     height: 450px;
   }
+  
+.ngRow.selected {
+    background-color: #93cfec;
+}

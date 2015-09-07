@@ -5,7 +5,8 @@
 
     <div class="panel-body">
         <button ng-click='vm.findCompanies()'>Fetch</button>
-        <div ui-grid="vm.gridOptions" class="myGrid"></div>
+        <button ng-click='vm.showSelected()'>Info</button>
+        <div ui-grid="vm.gridOptions" ui-grid-selection class="myGrid"></div>
 <!--
         <table class="table">
 
