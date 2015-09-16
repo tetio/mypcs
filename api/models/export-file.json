@@ -1,10 +1,8 @@
 {
-    'id': '77ea4e1cc906aaef9d1893bb',
-    consigment_info: {
-        'booking': 'BK08934HH_001',
-        carrier/merchant
-    }
-    'consignee': {
+    "id": "77ea4e1cc906aaef9d1893bb",
+    "booking_number": "",
+    "call_sign": "65523",
+    "shipping_agent": {
         "id" : "55e7181cc906aaef9d1893bb",
         "situation" : "A",
         "fax" : "(716) 201-1843",
@@ -19,28 +17,59 @@
         "name" : "Bryan Holt Ltd.",
         "code" : "RI63908",
     },
-    consignor: {},
-    carrier: {},
-    haulier: {},
-    vessel: {
-        'call_sign': '65523',
+    "freight_forwarder":   {
+        "id": "55ed4ec1f083797c256a1af3",
+        "situation": "A",
+        "fax": "(509) 310-1731",
+        "phone": "(435) 700-8460",
+        "postal_code": "N2H 0P9",
+        "country": "Mayotte",
+        "region": "Manitoba",
+        "city": "Wadobri",
+        "address": "760 Ogagok Heights",
+        "email": "contact@dannyphillips.com",
+        "web": "www.dannyphillips.com",
+        "name": "Danny Phillips Ltd.",
+        "code": "IL62848",
+    },
+    "container_terminal": {}, 
+    "container_depot": {},
+    "shipper": {},
+    "consignee": {},
+    "notify": {},    
+    "carrier": {},
+    "haulier": {},
+    "vessel": {
+        
 
     },
-    train: {},
-    lorry: {},
-    equipmenets: [],
-    goods: [],
-    dangerousGoods: []
+    "train": {},
+    "lorry": {},
+    "shipping_info": {
+        
+    },
+    "forwarding_info": {
+        
+    },
+    "equipments": [ {
+        "number": "AAAAU1231234",
+        "reference": "HG56565656_001",
+        "type": "4G00",
+        "seals": ["SL777", "MT66789"],
+        "unit_gross_weight":
+        "total_gross_weight":
+        "unit_net_weight":
+        "total_net_weight":    
+        "events": {
+            "ingate_estimated": "2015-09-07T08:00:00.000Z",
+            "ingate": "2015-09-07T08:45:53.053Z",
+            "unloaded": "2015-09-07T08:57:00.000Z"
+            "loaded": "2015-09-12T22:45:53.053Z"
+        },
+        "reefer_info"
+    }],
+    "goods": [],
+    "dangerousGoods": []
 }
 
 
-equipment: {
-    'number': 'AAAAU1231234',
-    'ref': 'HG56565656_001',
-    'type': '4G00',
-    ...
-    ingate_estimated: 
-    ingate_date:
-    unloaded_date:
-    loaded_:
-}
