@@ -1,0 +1,46 @@
+{
+    'id': '77ea4e1cc906aaef9d1893bb',
+    consigment_info: {
+        'booking': 'BK08934HH_001',
+        carrier/merchant
+    }
+    'consignee': {
+        "id" : "55e7181cc906aaef9d1893bb",
+        "situation" : "A",
+        "fax" : "(716) 201-1843",
+        "phone" : "(373) 309-7497",
+        "postal_code" : "A5V 4S5",
+        "country" : "Pitcairn Islands",
+        "region" : "Quebec",
+        "city" : "Diecipoh",
+        "address" : "1706 Civu Court",
+        "email" : "contact@bryanholt.com",
+        "web" : "www.bryanholt.com",
+        "name" : "Bryan Holt Ltd.",
+        "code" : "RI63908",
+    },
+    consignor: {},
+    carrier: {},
+    haulier: {},
+    vessel: {
+        'call_sign': '65523',
+
+    },
+    train: {},
+    lorry: {},
+    equipmenets: [],
+    goods: [],
+    dangerousGoods: []
+}
+
+
+equipment: {
+    'number': 'AAAAU1231234',
+    'ref': 'HG56565656_001',
+    'type': '4G00',
+    ...
+    ingate_estimated: 
+    ingate_date:
+    unloaded_date:
+    loaded_:
+}
