@@ -31,12 +31,7 @@ function ExportFileHandler() {
 
     this.create = function (next) {
         var exportFile = new ExportFile();
-        var forwarder;
-        var shippingAgent;
-        var terminal;
-        var depot;
         countCompanies().then(function(count) {
-
             Promise.join(findOneCompany(count), findOneCompany(count), findOneCompany(count), findOneCompany(count), function(forwarder, shippingAgent, terminal, depot) {
                 exportFile.shipping_agent = company2Nad(shippingAgent);
                 exportFile.freight_forwarder = company2Nad(forwarder);
@@ -77,7 +72,6 @@ function ExportFileHandler() {
             next();
         }
     };
-
 
     function findOneCompany(count) {
         return new Promise(function(resolve, reject) {
