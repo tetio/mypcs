@@ -9,6 +9,8 @@ var CompanyHandler = require('./handlers/companyHandler');
 var companyHandler = new CompanyHandler();
 var UserHandler = require('./handlers/userHandler');
 var userHandler = new UserHandler();
+var ExportFile = require('./handlers/exportFileHandler');
+var exportFileHandler = new ExportFile();
 
 // Mongo and Mongoose
 var mongoose = require('mongoose');
@@ -73,7 +75,23 @@ router.route('/company/:company_id')
             res.json(company);
         });
     });
-
+router.route('/exportfile')
+    .get(function(req, res) {
+        exportFileHandler.find(function(err, exportFiles) {
+            if (err) {
+                res.send(err);
+            }
+           res.json(exportFiles);
+        });
+    })
+    .post(function(req, res) {
+        exportFileHandler.create(function(err, exportFile) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(exportFile);
+        })
+    });
 
 // User routes
 router.route('/user')
