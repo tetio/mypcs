@@ -29,12 +29,18 @@ var Equipment = new mongoose.Schema({
 
 
 var Good = new mongoose.Schema({
-
+    taric_code: String,
+    description: String
 });
 
+var DangerousGood = new mongoose.Schema({
+    type: String,
+    class: String
+});
+
+
+
 var ExportFileSchema = new mongoose.Schema({
-    booking_number: String,
-    call_sign: String,
     shipping_agent: {
         code: String,
         name: String,
@@ -152,7 +158,20 @@ var ExportFileSchema = new mongoose.Schema({
         phone: String,
         fax: String
     },
-    equipments: [Equipment]
+    booking_info: {
+        booking_number: String,
+        events: {
+            request_datetime: Date,
+            notification_datetime: Date
+        },
+    },
+    freight_forwarder_info: {
+        dossier_reference: String,
+        booking_observations: String
+    },
+    equipments: [Equipment],
+    goods: [Good],
+    dangerous_goods: [DangerousGood]
 });
 
 module.exports = mongoose.model('ExportFile', ExportFileSchema);
