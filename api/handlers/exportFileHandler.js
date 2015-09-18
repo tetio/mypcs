@@ -42,13 +42,13 @@ function ExportFileHandler() {
                 console.log('numEquip='+numEquip);
                 for (var i = 0; i < numEquip; i++) {
                     var equipment = {
-                        number: "MMMU"+chance.integer({min: -1000000, max: 9999999}),
+                        number: "MMMU"+chance.integer({min: 1000000, max: 9999999}),
                         reference: "ref1",
                         type: "2200",
                         unit_gross_wight: "KG",
-                        total_gross_weight: chance.integer({min: -13000, max: 13999}),
+                        total_gross_weight: chance.integer({min: 13000, max: 13999}),
                         unit_net_weight: "KG",
-                        total_net_weight: chance.integer({min: -12000, max: 12999})
+                        total_net_weight: chance.integer({min: 12000, max: 12999})
                     };
                     exportFile.equipments.push(equipment);
                 }
