@@ -1,11 +1,18 @@
-{
-    'id': '77ea4e1cc906aaef9d1893bb',
-    consigment_info: {
-        'booking': 'BK08934HH_001',
-        carrier/merchant
-    }
-    'consignee': {
-        "id" : "55e7181cc906aaef9d1893bb",
+    {
+    "id": "77ea4e1cc906aaef9d1893bb",
+    "file_ownwe_code": "IL62848",
+    "booking_number": "BK00717711",
+    "creation_date": "2015-09-01T22:45:53.053Z",
+    "last_modification": "2015-09-12T22:45:53.053Z", 
+    "messages": [
+        {"trk_id": "7fhdj3j43hjh34", "msg_1": 1},
+        {"trk_id": "4jkh5jk4h54k5h", "msg_1": 1},
+        {"trk_id": "4J23J4KL23J4LJ", "msg_1": 1},
+        {"trk_id": "34L5KP345KLP4P", "msg_1": 1},
+        {"trk_id": "L3K4L3PK44K3P4", "msg_1": 1}
+    ],
+    "shipping_agent": {
+        "_id" : "55e7181cc906aaef9d1893bb",
         "situation" : "A",
         "fax" : "(716) 201-1843",
         "phone" : "(373) 309-7497",
@@ -17,30 +24,94 @@
         "email" : "contact@bryanholt.com",
         "web" : "www.bryanholt.com",
         "name" : "Bryan Holt Ltd.",
-        "code" : "RI63908",
+        "code" : "RI63908"
     },
-    consignor: {},
-    carrier: {},
-    haulier: {},
-    vessel: {
-        'call_sign': '65523',
-
+    "freight_forwarder":   {
+        "_id": "55ed4ec1f083797c256a1af3",
+        "situation": "A",
+        "fax": "(509) 310-1731",
+        "phone": "(435) 700-8460",
+        "postal_code": "N2H 0P9",
+        "country": "Mayotte",
+        "region": "Manitoba",
+        "city": "Wadobri",
+        "address": "760 Ogagok Heights",
+        "email": "contact@dannyphillips.com",
+        "web": "www.dannyphillips.com",
+        "name": "Danny Phillips Ltd.",
+        "code": "IL62848"
     },
-    train: {},
-    lorry: {},
-    equipmenets: [],
-    goods: [],
-    dangerousGoods: []
+    "container_terminal":   {
+        "_id": "55ed4ec0f083797c256a1af1",
+        "last_modification": "2015-09-07T08:45:52.527Z",
+        "situation": "A",
+        "fax": "(930) 441-6184",
+        "phone": "(520) 436-1839",
+        "postal_code": "N5V 4Q6",
+        "country": "Tajikistan",
+        "region": "Quebec",
+        "city": "Nilbecmac",
+        "address": "1341 Puza Place",
+        "email": "contact@philipjoseph.com",
+        "web": "www.philipjoseph.com",
+        "name": "Philip Joseph Ltd.",
+        "code": "KS04108"
+        }, 
+    "container_depot": {},
+    "shipper": {},
+    "consignee": {},
+    "notify": {},    
+    "carrier": {},
+    "haulier": {},
+    "vessel": {
+        "omi": "847389473",
+        "call_sign": "GHT67Y",
+        "name": "MSC CARTHAGO"
+     },
+     "port_call": {
+        "port_callnumber": "65523",
+        "eta": "2015-09-11T15:00:00.000Z",
+        "etd": "2015-09-12T22:45:53.053Z",
+    },
+    "train": {},
+    "lorry": {},
+    "shipping_info": {
+        
+    },
+    "forwarding_info": {
+        "shippment_reference": "ME92992-11",
+        "carriage_condition": "P2P",
+        "transport_movement_details": "M",
+        "terms_of_delivery": "1" //Delivery arranged by the supplier (door-to) Delivery arranged by logistic service provider(Port-to)
+        // Condicions de transport
+    },
+    "equipments": [ {
+        "number": "AAAAU1231234",
+        "reference": "HG56565656_001",
+        "type": "4G00",
+        "seals": ["SL777", "MT66789"],
+        "unit_gross_weight": "KG",
+        "total_gross_weight": 12210.00,
+        "unit_net_weight": "KG",
+        "total_net_weight": 11610.00,   
+        "events": {
+            "ingate_estimated": "2015-09-07T08:00:00.000Z",
+            "ingate": "2015-09-07T08:45:53.053Z",
+            "unloaded": "2015-09-07T08:57:00.000Z",
+            "loaded": "2015-09-12T22:45:53.053Z"
+        },
+        "reefer_info" : {
+            "air_flow_volume": 12,
+            "co2_level": 4.0,
+            "n2_level": 50.0,
+            "o2_level": 15.5,
+            "humidity_percentage": 80.7,
+            "vents_terminal": true,
+            "vents_depot": false            
+        }
+    }],
+    "goods": [],
+    "dangerousGoods": []
 }
 
 
-equipment: {
-    'number': 'AAAAU1231234',
-    'ref': 'HG56565656_001',
-    'type': '4G00',
-    ...
-    ingate_estimated: 
-    ingate_date:
-    unloaded_date:
-    loaded_:
-}
