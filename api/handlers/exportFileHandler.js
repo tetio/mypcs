@@ -38,15 +38,20 @@ function ExportFileHandler() {
                 exportFile.container_terminal = company2Nad(terminal);
                 exportFile.container_depot = company2Nad(depot);
                 exportFile.booking_number = chance.postal().replace(' ', '');
-                var equipment = {
-                    reference: "ref1",
-                    type: "2200",
-                    unit_gross_wight: "KG",
-                    total_gross_weight: "12000",
-                    unit_net_weight: "KG",
-                    total_net_weight: "8500"
-                };
-                exportFile.equipments.push(equipment);
+                var numEquip = Math.floor(Math.random() * 5);
+                console.log('numEquip='+numEquip);
+                for (var i = 0; i < numEquip; i++) {
+                    var equipment = {
+                        number: "MMMU"+chance.integer({min: -1000000, max: 9999999}),
+                        reference: "ref1",
+                        type: "2200",
+                        unit_gross_wight: "KG",
+                        total_gross_weight: chance.integer({min: -13000, max: 13999}),
+                        unit_net_weight: "KG",
+                        total_net_weight: chance.integer({min: -12000, max: 12999})
+                    };
+                    exportFile.equipments.push(equipment);
+                }
                 exportFile.save(function (err) {
                     if (err) {
                         next(err);
