@@ -28,14 +28,47 @@ var Equipment = new mongoose.Schema({
 });
 
 
-var Good = new mongoose.Schema({
+var Good = new mongoose.Schema({    
     taric_code: String,
-    description: String
+    description: String,
+    packages: {
+        quantity: String,
+        type: String,
+        description: String
+    },
+    unit_gross_wight: String,
+    total_gross_weight: String,S
+    unit_net_weight: String,
+    total_net_weight: String,
+    marks: [String],
+    temperature: {S
+        unit: String,
+        max: String,
+        min: String
+    },
+    volume: {
+        unit: String,
+        value: String
+    },
+    situation: String,
+    dangerous_goods: [DangerousGood],
+    split_goods_placement: [{
+        equipment_number: String,
+        package_quantity: String,
+        gross_weight: String
+    }]
 });
 
 var DangerousGood = new mongoose.Schema({
-    type: String,
-    class: String
+    hazard_code: {
+        identification_code:String,
+        additional_classification_identifier: String,
+        code_version_identifier: String
+    },
+    united_nations_identifier: String,
+    packaging_danger_level_code: String,
+    emergency_procedure_for_ships_identifier: String,
+    description: String,
 });
 
 
