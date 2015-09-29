@@ -1,19 +1,21 @@
 (function () {
     'use strict';
+
     angular
         .module('pcsManagement')
-        .controller('CompanyListCtrl',
-            ['companyResource', '$scope', '$timeout',
-                CompanyListCtrl]);
+        .controller('ExportFileListCtrl',
+            ['exportFileResource', '$scope', '$timeout',
+                ExportFileListCtrl]);
 
-    function CompanyListCtrl(companyResource, $scope, $timeout) {
+    function ExportFileListCtrl(exportFileResource, $scope, $timeout) {
         var vm = this;
 
         vm.search = '';
+        vm.selectedExportFile = null;
 
-        vm.findCompanies = function () {
-            console.log('findCompanies');
-            companyResource.query(function (data) {
+        vm.findExportFiles = function () {
+            console.log('findExportFiles');
+            exportFileResource.query(function (data) {
                 vm.gridOptions.data = data;
                 if (data.length > 0) {
                     vm.gridApi.grid.modifyRows(vm.gridOptions.data);
@@ -24,7 +26,7 @@
 
 
         vm.showSelected = function () {
-            console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
+            console.log('getCurrentSelection code: ' + vm.selectedExportFile.code);
         };
 
 
@@ -41,17 +43,16 @@
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 var msg = 'row selected ' + row.isSelected;
                 console.log(msg);
-                vm.selectedCompany = row.entity;
-                console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
-
+                vm.selectedExportFile = row.entity;
+                console.log('getCurrentSelection code: ' + vm.selectedExportFile.code);
             });
 
             gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
                 var msg = 'rows changed ' + rows.length;
-                console.log(msg);    
-
+                console.log(msg);
             });
         };
+
         //vm.gridOptions.data = 'vm.companies';
         vm.gridOptions.columnDefs = [
             { field: '_id', displayName: 'id' },

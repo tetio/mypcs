@@ -15,7 +15,7 @@ function CompanyHandler() {
             }
             next(null, company);
         });
-    }
+    };
 
     this.find = function (next) {
         Company.find(function (err, companies) {
@@ -24,13 +24,13 @@ function CompanyHandler() {
             }
             next(null, companies);
         });
-    }
+    };
 
     this.create = function (next) {
         var company = new Company();
         company.code = chance.state() + chance.zip();
         company.name = chance.name();
-        var domain = company.name.replace(' ', '').toLocaleLowerCase() + '.com'
+        var domain = company.name.replace(' ', '').toLocaleLowerCase() + '.com';
         company.web = 'www.' + domain;
         company.email = 'contact@' + domain;
         company.name = company.name + " Ltd.";
@@ -50,7 +50,7 @@ function CompanyHandler() {
             last_name: last,
             mobile: chance.phone(),
             email: first.toLocaleLowerCase() + '.' + last.toLocaleLowerCase() + '@' + domain
-        }
+        };
         company.primary_contact = contact;
         company.save(function (err) {
             if (err) {
@@ -58,12 +58,12 @@ function CompanyHandler() {
             }
             next(company);
         });
-    }
+    };
 
     this.update = function (id, json, next) {
-        var company = Company(json);
+        var company = new Company(json);
         console.log(id + "===" + company._id);
-        if (id == company._id) {
+        if (id === company._id) {
             company.last_modification = new Date();
             Company.update({ _id: company._id }, company, { upsert: false }, function (err) {
                 if (err) {
@@ -74,7 +74,7 @@ function CompanyHandler() {
         } else {
             next();
         }
-    }
+    };
 }
 
 module.exports = CompanyHandler;

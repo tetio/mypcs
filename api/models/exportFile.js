@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
 
-
 var Equipment = new mongoose.Schema({
     number: String,
     reference: String,
@@ -45,17 +44,14 @@ var SplitGoodsPlacement = new mongoose.Schema({
   gross_weight: Number
 });
 
-var Package = new mongoose.Schema({
-  quantity: Number,
-  type: String,
-  description: String
-});
-
-
 var Good = new mongoose.Schema({
     taric_code: String,
     description: String,
-    package: [Package],
+    package: {
+			quantity: Number,
+		  code: String,
+		  description: String
+		},
     unit_gross_wight: String,
     total_gross_weight: String,
     unit_net_weight: String,

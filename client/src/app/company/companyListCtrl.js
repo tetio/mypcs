@@ -9,7 +9,8 @@
     function CompanyListCtrl(companyResource, $scope, $timeout) {
         var vm = this;
 
-        vm.search = "";
+        vm.search = '';
+        vm.selectedCompany = null;
 
         vm.findCompanies = function () {
             console.log('findCompanies');
@@ -20,12 +21,12 @@
                     vm.gridApi.selection.selectRow(vm.gridOptions.data[0]);
                 }
             });
-        }
+        };
 
 
         vm.showSelected = function () {
             console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
-        }
+        };
 
 
         vm.gridOptions = {
@@ -60,11 +61,5 @@
             { field: 'situation', width: 100 },
             { field: 'last_modification', cellFilter: 'date:"dd/MM/yyyy HH:mm"', type: 'date', width: 150 }
         ];
-
-
-
     }
-
-
-
 } ());

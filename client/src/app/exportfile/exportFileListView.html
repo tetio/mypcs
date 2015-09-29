@@ -1,5 +1,5 @@
 <div class="panel panel-primary">
-    <div class="panel-heading" style="font-size:large">Companies
+    <div class="panel-heading" style="font-size:large">Export Files
     </div>
 
     <div class="panel-body">
@@ -10,12 +10,12 @@
                 required>
             </div>
             <div class="col-sm-8">
-                <button class="btn btn-primary btn-s" ng-click="vm.findCompanies()">Search</button>
+                <button class="btn btn-primary btn-s" ng-click="vm.findExportFiles()">Search</button>
                 <!-- ng-disabled="!bBusquedaPermitida()" -->
             </div>
         </form>
         <div class="col-sm-2 text-right">
-            <button type="button" class="btn btn-primary btn-s" ng-show="!bAppReadOnly()" ng-click='crearEmpresa()'>+</button>
+            <button type="button" class="btn btn-primary btn-s" ng-show="!bAppReadOnly()" ng-click='crearExportFile()'>+</button>
         </div>
     </div>
     <div class="overlay" ng-show='bHayQueGuardar()'></div>
