@@ -38,6 +38,7 @@ function ExportFileHandler() {
                 exportFile.container_terminal = company2Nad(terminal);
                 exportFile.container_depot = company2Nad(depot);
                 exportFile.booking_number = chance.postal().replace(' ', '');
+                // equipments
                 var numEquip = Math.floor(Math.random() * 5);
                 console.log('numEquip='+numEquip);
                 for (var i = 0; i < numEquip; i++) {
@@ -51,6 +52,26 @@ function ExportFileHandler() {
                         total_net_weight: chance.integer({min: 12000, max: 12999})
                     };
                     exportFile.equipments.push(equipment);
+                }
+                // Goods
+                for (var i = 0; i < numEquip; i++) {
+                    var good = {
+                        taric_code: ''+chance.integer({min: 5000000, max: 9999999}),
+                        description: "TEXTILES_"+i,
+                        package: [{
+                           quantity: i+10,
+                           type: 'BR',
+                           description: 'BARRIL'
+                        }],
+                        situation: 'A',
+                        split_goods_placement: [{
+                            equipment_number: exportFile.equipments[i].number,
+                            package_quantity: (i+20),
+                            gross_weight: (22000+(i+20)*10),
+                            _id: exportFile.equipments[i]._id
+                        }]
+                    };
+                    exportFile.goods.push(good);
                 }
                 exportFile.save(function (err) {
                     if (err) {

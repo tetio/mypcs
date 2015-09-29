@@ -39,7 +39,28 @@
                     }
 
                 }
+            })
+            .state('exportFileList', {
+                url: '/exportfile',
+                templateUrl: 'app/exportfile/exportFileListView.html',
+                controller: 'ExportFileListCtrl as vm',
+                controllerAs: 'vm'
+            })
+            .state('exportFileEdit', {
+                url: '/exportfile/edit/:exportFileId',
+                templateUrl: 'app/exportfile/exportFileListView.html',
+                controller: 'ExportFileEditCtrl as vm',
+                resolve: {
+                    exportFileResource: 'exportFileResource',
+
+                    companies: function (exportFileResource, $stateParam) {
+                        var exportFileId = $stateParam.exportFileId;
+                        return exportFileResource.query({ exportFileId: exportFileId }).$promise;
+                    }
+
+                }
             });
+
 
         $urlRouterProvider.otherwise('/');
     }

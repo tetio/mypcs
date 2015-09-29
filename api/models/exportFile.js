@@ -27,38 +27,6 @@ var Equipment = new mongoose.Schema({
     }
 });
 
-
-var Good = new mongoose.Schema({    
-    taric_code: String,
-    description: String,
-    packages: {
-        quantity: String,
-        type: String,
-        description: String
-    },
-    unit_gross_wight: String,
-    total_gross_weight: String,S
-    unit_net_weight: String,
-    total_net_weight: String,
-    marks: [String],
-    temperature: {S
-        unit: String,
-        max: String,
-        min: String
-    },
-    volume: {
-        unit: String,
-        value: String
-    },
-    situation: String,
-    dangerous_goods: [DangerousGood],
-    split_goods_placement: [{
-        equipment_number: String,
-        package_quantity: String,
-        gross_weight: String
-    }]
-});
-
 var DangerousGood = new mongoose.Schema({
     hazard_code: {
         identification_code:String,
@@ -71,7 +39,41 @@ var DangerousGood = new mongoose.Schema({
     description: String,
 });
 
+var SplitGoodsPlacement = new mongoose.Schema({
+  equipment_number: String,
+  package_quantity: Number,
+  gross_weight: Number
+});
 
+var Package = new mongoose.Schema({
+  quantity: Number,
+  type: String,
+  description: String
+});
+
+
+var Good = new mongoose.Schema({
+    taric_code: String,
+    description: String,
+    package: [Package],
+    unit_gross_wight: String,
+    total_gross_weight: String,
+    unit_net_weight: String,
+    total_net_weight: String,
+    marks: [String],
+    temperature: {
+        unit: String,
+        max: Number,
+        min: Number
+    },
+    volume: {
+        unit: String,
+        value: Number
+    },
+    situation: String,
+    dangerous_goods: [DangerousGood],
+    split_goods_placement: [SplitGoodsPlacement]
+});
 
 var ExportFileSchema = new mongoose.Schema({
     shipping_agent: {

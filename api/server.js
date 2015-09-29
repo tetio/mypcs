@@ -56,7 +56,7 @@ router.route('/company')
                 res.send(err);
             }
             res.json(company);
-        })
+        });
     });
 router.route('/company/:company_id')
     .get(function(req, res) {
@@ -90,9 +90,25 @@ router.route('/exportfile')
                 res.send(err);
             }
             res.json(exportFile);
-        })
+        });
     });
-
+    router.route('/exportfile/:exportfile_id')
+        .get(function(req, res) {
+            exportFileHandler.findById(req.params.exportfile_id, function(err, exportFile) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(exportFile);
+            });
+        })
+        .put(function(req, res) {
+            companyHandler.update(req.params.exportfile_id, req.body, function(err, exportFile) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(exportFile);
+            });
+        });
 // User routes
 router.route('/user')
     .get(function(req, res) {
@@ -110,7 +126,7 @@ router.route('/user')
                 res.send(err);
             }
             res.json(user);
-        })
+        });
     });
 router.route('/company/:username')
     .get(function(req, res) {
