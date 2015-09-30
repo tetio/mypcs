@@ -8,6 +8,35 @@ var Chance = require('chance');
 var chance = new Chance();
 
 function ExportFileHandler() {
+	// {"file_owner": "WA92828", "booking_number": "BK-B6O2J1"}
+	// db.getCollection('exportfiles').createIndex({'file_owner': 1})
+	// db.getCollection('exportfiles').createIndex({'booking_info.booking_number': 1})
+	this.findByCriteria = function (criterias, next) {
+		var queryCriteria = {};
+		if (criterias.file_owner !== undefined) {
+			queryCriteria.file_owner = criterias.file_owner;
+		}
+		if (criterias.booking_number !== undefined) {
+			queryCriteria['booking_info.booking_number'] = criterias.booking_number;
+		}
+		console.log(queryCriteria);
+		ExportFile.find(queryCriteria).limit(10).exec(function (err, exportFiles) {
+			if (err) {
+				next(err);
+			}
+			next(null, exportFiles);
+		});
+	};
+
+	function makeCondition(key, value, moreThanOne) {
+		var condition = '';
+		if (moreThanOne) {
+			condition = condition + ' ,';
+		}
+		condition = condition + '\''+key+'\': ' + '\''+ value + '\'';
+		return condition;
+
+	}
 
 	this.findById = function (id, next) {
 		ExportFile.findById(id, function (err, exportFile) {
@@ -20,30 +49,13 @@ function ExportFileHandler() {
 
     // db.getCollection('exportfiles').find( {$and: [{file_owner: 'OK07913'}, {modified_at: {$gt: new Date(2005,0,1)}}, {modified_at: {$lt: new Date(2015,8,31)}}]})
     // db.getCollection('exportfiles').find({file_owner: 'OK07913', modified_at: {$gt: new Date(2005,0,1)}, modified_at: {$lt: new Date(2015,8,31)}})
-    this.findByOwner = function (owner, from, to, next) {
-        var query = {file_owner: owner, modified_at: {$gt: from}, modified_at: {$lt: to}};
-		ExportFile.find({}, function (err, exportFile) {
-			if (err) {
-				next(err);
-			}
-			next(null, exportFile);
-		});
-	};
-
-    this.findByCriteria = function (id, next) {
-		ExportFile.findById(id, function (err, exportFile) {
-			if (err) {
-				next(err);
-			}
-			next(null, exportFile);
-		});
-	};
 
 
 
 
+	// Search all limited to 20
 	this.find = function (next) {
-		ExportFile.find(function (err, exportFiles) {
+		ExportFile.find().limit(20).exec(function (err, exportFiles) {
 			if (err) {
 				next(err);
 			}
@@ -54,7 +66,9 @@ function ExportFileHandler() {
 	this.create = function (next) {
 		var exportFile = new ExportFile();
 		countCompanies().then(function(count) {
-			Promise.join(findOneCompany(count), findOneCompany(count), findOneCompany(count), findOneCompany(count), function(forwarder, shippingAgent, terminal, depot) {
+			Promise.join(findOneCompany(count), findOneCompany(count),
+			findOneCompany(count), findOneCompany(count),
+			function(forwarder, shippingAgent, terminal, depot) {
 				exportFile.shipping_agent = company2Nad(shippingAgent);
 				exportFile.freight_forwarder = company2Nad(forwarder);
 				exportFile.container_terminal = company2Nad(terminal);
@@ -93,7 +107,6 @@ function ExportFileHandler() {
 						}]
 					};
 					exportFile.goods.push(good);
-
 				}
                 exportFile.booking_info = {
                     booking_number: 'BK-'+chance.postal().replace(' ', ''),

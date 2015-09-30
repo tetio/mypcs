@@ -92,6 +92,15 @@ router.route('/exportfile')
             res.json(exportFile);
         });
     });
+	router.route('/exportfile/query')
+	    .post(function(req, res) {
+	        exportFileHandler.findByCriteria(req.body, function(err, exportFiles) {
+	            if (err) {
+	                res.send(err);
+	            }
+	            res.json(exportFiles);
+	        });
+	    });
     router.route('/exportfile/:exportfile_id')
         .get(function(req, res) {
             exportFileHandler.findById(req.params.exportfile_id, function(err, exportFile) {
