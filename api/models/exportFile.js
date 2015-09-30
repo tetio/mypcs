@@ -39,19 +39,19 @@ var DangerousGood = new mongoose.Schema({
 });
 
 var SplitGoodsPlacement = new mongoose.Schema({
-  equipment_number: String,
-  package_quantity: Number,
-  gross_weight: Number
+    equipment_number: String,
+    package_quantity: Number,
+    gross_weight: Number
 });
 
 var Good = new mongoose.Schema({
     taric_code: String,
     description: String,
     package: {
-			quantity: Number,
-		  code: String,
-		  description: String
-		},
+        quantity: Number,
+        code: String,
+        description: String
+    },
     unit_gross_wight: String,
     total_gross_weight: String,
     unit_net_weight: String,
@@ -72,6 +72,10 @@ var Good = new mongoose.Schema({
 });
 
 var ExportFileSchema = new mongoose.Schema({
+    created_at: Date,
+    modified_at: Date,
+    file_type: String,
+    file_owner: String,
     shipping_agent: {
         code: String,
         name: String,
@@ -192,8 +196,8 @@ var ExportFileSchema = new mongoose.Schema({
     booking_info: {
         booking_number: String,
         events: {
-            request_datetime: Date,
-            notification_datetime: Date
+            requested_at: Date,
+            notified_at: Date
         },
     },
     freight_forwarder_info: {

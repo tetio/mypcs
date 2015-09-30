@@ -18,6 +18,30 @@ function ExportFileHandler() {
 		});
 	};
 
+    // db.getCollection('exportfiles').find( {$and: [{file_owner: 'OK07913'}, {modified_at: {$gt: new Date(2005,0,1)}}, {modified_at: {$lt: new Date(2015,8,31)}}]})
+    // db.getCollection('exportfiles').find({file_owner: 'OK07913', modified_at: {$gt: new Date(2005,0,1)}, modified_at: {$lt: new Date(2015,8,31)}})
+    this.findByOwner = function (owner, from, to, next) {
+        var query = {file_owner: owner, modified_at: {$gt: from}, modified_at: {$lt: to}};
+		ExportFile.find({}, function (err, exportFile) {
+			if (err) {
+				next(err);
+			}
+			next(null, exportFile);
+		});
+	};
+
+    this.findByCriteria = function (id, next) {
+		ExportFile.findById(id, function (err, exportFile) {
+			if (err) {
+				next(err);
+			}
+			next(null, exportFile);
+		});
+	};
+
+
+
+
 	this.find = function (next) {
 		ExportFile.find(function (err, exportFiles) {
 			if (err) {
@@ -35,7 +59,6 @@ function ExportFileHandler() {
 				exportFile.freight_forwarder = company2Nad(forwarder);
 				exportFile.container_terminal = company2Nad(terminal);
 				exportFile.container_depot = company2Nad(depot);
-				exportFile.booking_number = chance.postal().replace(' ', '');
 				// equipments
 				var numEquip = Math.floor(Math.random() * 4)+1;
 				console.log('numEquip='+numEquip);
@@ -70,7 +93,18 @@ function ExportFileHandler() {
 						}]
 					};
 					exportFile.goods.push(good);
+
 				}
+                exportFile.booking_info = {
+                    booking_number: 'BK-'+chance.postal().replace(' ', ''),
+                    events: {
+                            notified_at: newDate()
+                    }
+                };
+                exportFile.created_at = newDate();
+                exportFile.modified_at = exportFile.created_at;
+                exportFile.file_type = 'EF_FF';
+                exportFile.file_owner = exportFile.freight_forwarder.code;
 				exportFile.save(function (err) {
 					if (err) {
 						next(err);
@@ -120,6 +154,16 @@ function ExportFileHandler() {
 		});
 	}
 
+    function newDate() {
+        return new Date(
+            chance.integer({min: 2005, max: 2015}),
+            chance.integer({min: 0, max: 11}),
+            chance.integer({min: 1, max: 28}),
+            chance.integer({min: 0, max: 23}),
+            chance.integer({min: 0, max: 59}),
+            chance.integer({min: 0, max: 59}),
+            chance.integer({min: 0, max: 999}));
+    }
 
 	function company2Nad(company) {
 		var nad = {
