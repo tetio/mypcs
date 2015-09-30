@@ -8,9 +8,18 @@ var Chance = require('chance');
 var chance = new Chance();
 
 function ExportFileHandler() {
+
+
 	// {"file_owner": "WA92828", "booking_number": "BK-B6O2J1"}
+	// {"file_owner": "CT28709", "booking_number": "BK-A9F4C4", "equipment_number": "MMMU9953715"}
 	// db.getCollection('exportfiles').createIndex({'file_owner': 1})
 	// db.getCollection('exportfiles').createIndex({'booking_info.booking_number': 1})
+	// db.getCollection('exportfiles').createIndex({'equipments.number': 1})
+	// db.getCollection('exportfiles').createIndex({'modified_at': 1})
+	// db.getCollection('exportfiles').find( {$and: [{file_owner: 'OK07913'}, {modified_at: {$gt: new Date(2005,0,1)}}, {modified_at: {$lt: new Date(2015,8,31)}}]})
+    // db.getCollection('exportfiles').find({file_owner: 'OK07913', modified_at: {$gt: new Date(2005,0,1)}, modified_at: {$lt: new Date(2015,8,31)}})
+
+
 	this.findByCriteria = function (criterias, next) {
 		var queryCriteria = {};
 		if (criterias.file_owner !== undefined) {
@@ -19,6 +28,11 @@ function ExportFileHandler() {
 		if (criterias.booking_number !== undefined) {
 			queryCriteria['booking_info.booking_number'] = criterias.booking_number;
 		}
+		if (criterias.equipment_number !== undefined) {
+			queryCriteria['equipments.number'] = criterias.equipment_number;
+		}
+		queryCriteria.modified_at = {$gt: new Date(2005,0,1)};
+		queryCriteria.modified_at = {$lt: new Date()};
 		console.log(queryCriteria);
 		ExportFile.find(queryCriteria).limit(10).exec(function (err, exportFiles) {
 			if (err) {
@@ -28,15 +42,6 @@ function ExportFileHandler() {
 		});
 	};
 
-	function makeCondition(key, value, moreThanOne) {
-		var condition = '';
-		if (moreThanOne) {
-			condition = condition + ' ,';
-		}
-		condition = condition + '\''+key+'\': ' + '\''+ value + '\'';
-		return condition;
-
-	}
 
 	this.findById = function (id, next) {
 		ExportFile.findById(id, function (err, exportFile) {
@@ -47,8 +52,6 @@ function ExportFileHandler() {
 		});
 	};
 
-    // db.getCollection('exportfiles').find( {$and: [{file_owner: 'OK07913'}, {modified_at: {$gt: new Date(2005,0,1)}}, {modified_at: {$lt: new Date(2015,8,31)}}]})
-    // db.getCollection('exportfiles').find({file_owner: 'OK07913', modified_at: {$gt: new Date(2005,0,1)}, modified_at: {$lt: new Date(2015,8,31)}})
 
 
 
