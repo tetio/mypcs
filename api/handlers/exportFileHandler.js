@@ -68,7 +68,21 @@ function ExportFileHandler() {
         });
     };
 
-    this.create = function(payload, next) {};
+    this.create = function(payload, next) {
+        var ef = new ExportFile();
+        ef.file_owner = payload.file_owner;
+        ef.created_at = new Date();
+        ef.modified_at = ef.created_at;
+        ef.booking_info.booking_number = payload.booking_number;
+    };
+
+    this.addEquip = function(payload, next) {};
+
+    this.addGood = function(payload, next) {};
+
+    this.addSplitGoodPartition = function(payload, next) {};
+
+    this.addAgent = function(payload, next) {};
 
     this.create = function(next) {
         var exportFile = new ExportFile();
@@ -78,17 +92,12 @@ function ExportFileHandler() {
                 findOneCompany(count), findOneCompany(count),
                 function(forwarder, shippingAgent, terminal,
                     depot) {
-                    exportFile.shipping_agent = company2Nad(
-                        shippingAgent);
-                    exportFile.freight_forwarder = company2Nad(
-                        forwarder);
-                    exportFile.container_terminal = company2Nad(
-                        terminal);
-                    exportFile.container_depot = company2Nad(
-                        depot);
+                    exportFile.shipping_agent = company2Nad(shippingAgent);
+                    exportFile.freight_forwarder = company2Nad(forwarder);
+                    exportFile.container_terminal = company2Nad(terminal);
+                    exportFile.container_depot = company2Nad(depot);
                     // equipments
-                    var numEquip = Math.floor(Math.random() * 4) +
-                        1;
+                    var numEquip = Math.floor(Math.random() * 4) +1;
                     console.log('numEquip=' + numEquip);
                     for (var i = 0; i < numEquip; i++) {
                         var equipment = {
@@ -126,23 +135,16 @@ function ExportFileHandler() {
                             },
                             situation: 'A',
                             split_goods_placement: [{
-                                equipment_number: exportFile
-                                    .equipments[j].number,
-                                package_quantity: (
-                                    j + 20),
-                                gross_weight: (
-                                    22000 + (j +
-                                        20) *
-                                    10),
-                                _id: exportFile.equipments[
-                                    j]._id
+                                equipment_number: exportFile.equipments[j].number,
+                                package_quantity: (j + 20),
+                                gross_weight: (22000 + (j+20) * 10),
+                                _id: exportFile.equipments[j]._id
                             }]
                         };
                         exportFile.goods.push(good);
                     }
                     exportFile.booking_info = {
-                        booking_number: 'BK-' + chance.postal()
-                            .replace(' ', ''),
+                        booking_number: 'BK-' + chance.postal().replace(' ', ''),
                         events: {
                             notified_at: newDate()
                         }
@@ -150,8 +152,7 @@ function ExportFileHandler() {
                     exportFile.created_at = newDate();
                     exportFile.modified_at = exportFile.created_at;
                     exportFile.file_type = 'EF_FF';
-                    exportFile.file_owner = exportFile.freight_forwarder
-                        .code;
+                    exportFile.file_owner = exportFile.freight_forwarder.code;
                     exportFile.save(function(err) {
                         if (err) {
                             next(err);
