@@ -72,8 +72,7 @@ router.route('/company')
     });
 router.route('/company/:company_id')
     .get(function(req, res) {
-        companyHandler.findById(req.params.company_id, function(err,
-            company) {
+        companyHandler.findById(req.params.company_id, function(err, company) {
             if (err) {
                 res.send(err);
             }
@@ -81,8 +80,7 @@ router.route('/company/:company_id')
         });
     })
     .put(function(req, res) {
-        companyHandler.update(req.params.company_id, req.body, function(err,
-            company) {
+        companyHandler.update(req.params.company_id, req.body, function(err, company) {
             if (err) {
                 res.send(err);
             }
@@ -139,6 +137,23 @@ router.route('/exportfile/:exportfile_id')
     .put(function(req, res) {
         companyHandler.update(req.params.exportfile_id, req.body, function(
             err, exportFile) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(exportFile);
+        });
+    });
+router.route('/exportfile/equipment/:exportfile_id')
+    .post(function(req, res) {
+        exportFileHandler.addEquipment(req.params.exportfile_id, req.body, function(err, exportFile) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(exportFile);
+        });
+    })
+    .put(function(req, res) {
+        exportFileHandler.updateEquipment(req.params.exportfile_id, req.body, function(err, exportFile) {
             if (err) {
                 res.send(err);
             }

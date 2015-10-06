@@ -209,4 +209,8 @@ var ExportFileSchema = new mongoose.Schema({
     dangerous_goods: [DangerousGood]
 });
 
+ExportFileSchema.statics.findAndModify = function (query, sort, doc, options, callback) {
+  return this.collection.findAndModify(query, sort, doc, options, callback);
+};
+
 module.exports = mongoose.model('ExportFile', ExportFileSchema);

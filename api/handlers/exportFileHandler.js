@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 // models
+var ObjectID = require('mongodb').ObjectID;
 var ExportFile = require('../models/exportFile');
 var Company = require('../models/company');
 // Load Chance
@@ -76,7 +77,35 @@ function ExportFileHandler() {
         ef.booking_info.booking_number = payload.booking_number;
     };
 
-    this.addEquip = function(payload, next) {};
+    this.addEquipment = function(exportfileId, payload, next) {
+        var objectId = new ObjectID(exportfileId);
+        var query = {_id: objectId};
+        var update = {$push: {equipments: payload.equipment}};
+        ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
+            if (err) {
+                next(err);
+            }
+            next(err, exportFile);
+        });
+    };
+
+    this.updateEquipment = function(exportfileId, payload, next) {
+        var objectId = new ObjectID(exportfileId);
+        var query = {_id: objectId};
+        var update = {$pull: {equipments: {number: payload.equipment.number}}};
+        ExportFile.findAndModify(query, [], update, {'multi': true}, function(err, exportFile) {
+            if (err) {
+                next(err);
+            }
+            update = {$push: {equipments: payload.equipment}};
+            ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
+                if (err) {
+                    next(err);
+                }
+                next(err, exportFile);
+            });
+        });
+    };
 
     this.addGood = function(payload, next) {};
 
@@ -254,6 +283,15 @@ function ExportFileHandler() {
             fax: company.fax
         };
         return nad;
+    }
+
+    function addEquipment(equipment) {
+        return new Promise(function(resolve, reject) {
+            games.addWordToPlayer(gameId, word, playerId, function(err, game){
+                if (err) reject(err);
+                resolve(game);
+            });
+        });
     }
 }
 
