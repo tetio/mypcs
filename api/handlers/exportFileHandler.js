@@ -81,30 +81,49 @@ function ExportFileHandler() {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
         var update = {$push: {equipments: payload.equipment}};
-        ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
-            if (err) {
-                next(err);
-            }
-            next(err, exportFile);
+        findAndModify(query, [], update, {'new': true})
+        .then(function(err, exportFile) {
+            next(err, exportFile) ;
+        });
+    };
+
+    this.removeEquipment = function(exportfileId, payload, next) {
+        var objectId = new ObjectID(exportfileId);
+        var query = {_id: objectId};
+        var update = {$pull: {equipments: {number: payload.equipment.number}}};
+        findAndModify(query, [], update, {'multi': true})
+        .then(function(err, exportFile) {
+            next(err, exportFile) ;
         });
     };
 
     this.updateEquipment = function(exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
+        // var update = {$pull: {equipments: {number: payload.equipment.number}}};
+        // ExportFile.findAndModify(query, [], update, {'multi': true}, function(err, exportFile) {
+        //     if (err) {
+        //         next(err);
+        //     }
+        //     update = {$push: {equipments: payload.equipment}};
+        //     ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
+        //         if (err) {
+        //             next(err);
+        //         }
+        //         next(err, exportFile);
+        //     });
+        // });
+
         var update = {$pull: {equipments: {number: payload.equipment.number}}};
-        ExportFile.findAndModify(query, [], update, {'multi': true}, function(err, exportFile) {
-            if (err) {
-                next(err);
-            }
+        findAndModify(query, [], update, {'multi': true})
+        .then(function(err, exportFile) {
             update = {$push: {equipments: payload.equipment}};
-            ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
-                if (err) {
-                    next(err);
-                }
+            findAndModify(query, [], update, {'new': true})
+            .then(function(err, exportFile) {
                 next(err, exportFile);
             });
         });
+
     };
 
     this.addGood = function(payload, next) {};
@@ -285,11 +304,13 @@ function ExportFileHandler() {
         return nad;
     }
 
-    function addEquipment(equipment) {
+    function findAndModify(query, sort, doc, options, callback) {
         return new Promise(function(resolve, reject) {
-            games.addWordToPlayer(gameId, word, playerId, function(err, game){
-                if (err) reject(err);
-                resolve(game);
+            ExportFile.findAndModify(query, sort, doc, options, function(err, exportFile) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(exportFile);
             });
         });
     }

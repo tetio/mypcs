@@ -159,6 +159,14 @@ router.route('/exportfile/equipment/:exportfile_id')
             }
             res.json(exportFile);
         });
+    })
+    .delete(function(req, res) {
+        exportFileHandler.removeEquipment(req.params.exportfile_id, req.body, function(err, exportFile) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(exportFile);
+        });
     });
 // User routes
 router.route('/user')
