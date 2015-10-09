@@ -39,12 +39,14 @@ var DangerousGood = new mongoose.Schema({
 });
 
 var SplitGoodsPlacement = new mongoose.Schema({
+    // good_id: Number,
     equipment_number: String,
     package_quantity: Number,
     gross_weight: Number
 });
 
 var Good = new mongoose.Schema({
+    id: Number,
     taric_code: String,
     description: String,
     package: {
@@ -67,8 +69,8 @@ var Good = new mongoose.Schema({
         value: Number
     },
     situation: String,
-    dangerous_goods: [DangerousGood],
-    split_goods_placement: [SplitGoodsPlacement]
+    //split_goods_placement: [SplitGoodsPlacement],
+    dangerous_goods: [DangerousGood]
 });
 
 var ExportFileSchema = new mongoose.Schema({
@@ -206,11 +208,17 @@ var ExportFileSchema = new mongoose.Schema({
     },
     equipments: [Equipment],
     goods: [Good],
+    split_goods_placement: [SplitGoodsPlacement],
     dangerous_goods: [DangerousGood]
 });
 
 ExportFileSchema.statics.findAndModify = function (query, sort, doc, options, callback) {
   return this.collection.findAndModify(query, sort, doc, options, callback);
+};
+
+
+ExportFileSchema.statics.initializeOrderedBulkOp = function () {
+  return this.collection.initializeOrderedBulkOp();
 };
 
 module.exports = mongoose.model('ExportFile', ExportFileSchema);

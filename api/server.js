@@ -14,8 +14,7 @@ var exportFileHandler = new ExportFile();
 
 // Mongo and Mongoose
 var mongoose = require('mongoose');
-var dbURI = require("./config/env.json")[process.env.NODE_ENV || 'development']
-    ["MONGO_URI"];
+var dbURI = require("./config/env.json")[process.env.NODE_ENV || 'development']["MONGO_URI"];
 var dbOptions = {
     server: {
         socketOptions: {
@@ -116,18 +115,17 @@ router.route('/exportfile/create')
 
 router.route('/exportfile/query')
     .post(function(req, res) {
-        exportFileHandler.findByCriteria(req.body, function(err,
-            exportFiles) {
+        exportFileHandler.findByCriteria(req.body, function(err, exportFiles) {
             if (err) {
                 res.send(err);
             }
             res.json(exportFiles);
         });
     });
+
 router.route('/exportfile/:exportfile_id')
     .get(function(req, res) {
-        exportFileHandler.findById(req.params.exportfile_id, function(err,
-            exportFile) {
+        exportFileHandler.findById(req.params.exportfile_id, function(err, exportFile) {
             if (err) {
                 res.send(err);
             }
@@ -135,8 +133,7 @@ router.route('/exportfile/:exportfile_id')
         });
     })
     .put(function(req, res) {
-        companyHandler.update(req.params.exportfile_id, req.body, function(
-            err, exportFile) {
+        companyHandler.update(req.params.exportfile_id, req.body, function(err, exportFile) {
             if (err) {
                 res.send(err);
             }

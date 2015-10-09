@@ -39,8 +39,7 @@ function ExportFileHandler() {
             $lt: new Date()
         };
         console.log(queryCriteria);
-        ExportFile.find(queryCriteria).limit(10).exec(function(err,
-            exportFiles) {
+        ExportFile.find(queryCriteria).limit(10).exec(function(err, exportFiles) {
             if (err) {
                 next(err);
             }
@@ -87,35 +86,55 @@ function ExportFileHandler() {
         });
     };
 
-    this.removeEquipment = function(exportfileId, payload, next) {
+    this.removeEquipment_ok = function(exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
-        var update = {$pull: {equipments: {number: payload.equipment.number}}};
-        findAndModify(query, [], update, {'multi': true})
+        var update = {$pull: {'split_goods_placement': {equipment_number: payload.equipment.number}}};
+        findAndModify(query, [], update, {'multi': false})
         .then(function(err, exportFile) {
-            next(err, exportFile) ;
+            update = {$pull: {equipments: {number: payload.equipment.number}}};
+            findAndModify(query, [], update, {'multi': false})
+            .then(function(err, exportFile) {
+                next(err, exportFile);
+            });
         });
     };
+
+
+    this.removeEquipment = function(exportfileId, payload, next) {
+        var bulk = ExportFile.initializeOrderedBulkOp();
+
+        // bulk.find({
+        //     '_id': new ObjectID(exportfileId)
+        // }).updateOne({
+        //     '$pull': {'equipments': {'number': payload.equipment.number}},
+        //     '$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}},
+        // });
+        bulk.find({
+            '_id': new ObjectID(exportfileId)
+        }).updateOne({
+            '$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}},
+        });
+        bulk.find({
+            '_id': new ObjectID(exportfileId)
+        }).updateOne({
+            '$pull': {'equipments': {'number': payload.equipment.number}},
+        });
+
+        bulk.execute(function(err, result) {
+            if (err) {
+                next(err);
+            }
+            next(null, result);
+        });
+    };
+
 
     this.updateEquipment = function(exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
-        // var update = {$pull: {equipments: {number: payload.equipment.number}}};
-        // ExportFile.findAndModify(query, [], update, {'multi': true}, function(err, exportFile) {
-        //     if (err) {
-        //         next(err);
-        //     }
-        //     update = {$push: {equipments: payload.equipment}};
-        //     ExportFile.findAndModify(query, [], update, {'new': true}, function(err, exportFile) {
-        //         if (err) {
-        //             next(err);
-        //         }
-        //         next(err, exportFile);
-        //     });
-        // });
-
         var update = {$pull: {equipments: {number: payload.equipment.number}}};
-        findAndModify(query, [], update, {'multi': true})
+        findAndModify(query, [], update, {'multi': false})
         .then(function(err, exportFile) {
             update = {$push: {equipments: payload.equipment}};
             findAndModify(query, [], update, {'new': true})
@@ -171,6 +190,7 @@ function ExportFileHandler() {
                     // Goods
                     for (var j = 0; j < numEquip; j++) {
                         var good = {
+                            id: j,
                             taric_code: '' + chance.integer({
                                 min: 5000000,
                                 max: 9999999
@@ -182,15 +202,30 @@ function ExportFileHandler() {
                                 description: 'BARRIL'
                             },
                             situation: 'A',
-                            split_goods_placement: [{
-                                equipment_number: exportFile.equipments[j].number,
-                                package_quantity: (j + 20),
-                                gross_weight: (22000 + (j+20) * 10),
-                                _id: exportFile.equipments[j]._id
-                            }]
+                            split_goods_placement: []
                         };
+                        // var sgp = {
+                        //         good_id: j,
+                        //         equipment_number: exportFile.equipments[j].number,
+                        //         pacjage_quantity: (j + 20),
+                        //         gross_weight: (22000 + (j+20) * 10),
+                        //         _id: exportFile.equipments[j]._id
+                        // };
+                        // good.split_goods_placement.push(sgp);
                         exportFile.goods.push(good);
                     }
+                    // split_goods_placement
+                    for (var k = 0; k < numEquip; k++) {
+                        var sgp = {
+                                good_id: k,
+                                equipment_number: exportFile.equipments[k].number,
+                                package_quantity: (k + 20),
+                                gross_weight: (22000 + (k+20) * 10),
+                                _id: exportFile.equipments[k]._id
+                        };
+                        exportFile.split_goods_placement.push(sgp);
+                    }
+
                     exportFile.booking_info = {
                         booking_number: 'BK-' + chance.postal().replace(' ', ''),
                         events: {
@@ -228,7 +263,7 @@ function ExportFileHandler() {
                 next(null, exportFile);
             });
         } else {
-            next();
+            // next();
         }
     };
 
