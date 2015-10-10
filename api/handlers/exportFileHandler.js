@@ -104,12 +104,6 @@ function ExportFileHandler() {
     this.removeEquipment = function(exportfileId, payload, next) {
         var bulk = ExportFile.initializeOrderedBulkOp();
 
-        // bulk.find({
-        //     '_id': new ObjectID(exportfileId)
-        // }).updateOne({
-        //     '$pull': {'equipments': {'number': payload.equipment.number}},
-        //     '$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}},
-        // });
         bulk.find({
             '_id': new ObjectID(exportfileId)
         }).updateOne({
