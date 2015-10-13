@@ -86,34 +86,25 @@ function ExportFileHandler() {
         });
     };
 
-    this.removeEquipment_ok = function(exportfileId, payload, next) {
+    this.removeEquipment2Calls = function(exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
-        var update = {$pull: {'split_goods_placement': {equipment_number: payload.equipment.number}}};
-        findAndModify(query, [], update, {'multi': false})
-        .then(function(err, exportFile) {
-            update = {$pull: {equipments: {number: payload.equipment.number}}};
-            findAndModify(query, [], update, {'multi': false})
-            .then(function(err, exportFile) {
+        var updateSGP = {$pull: {'split_goods_placement': {equipment_number: payload.equipment.number}}};
+        var updateEQD = {$pull: {equipments: {number: payload.equipment.number}}};
+        Promise.join(findAndModify(query, [], updateEQD, {'multi': false}), findAndModify(query, [], updateSGP, {'multi': false}),
+            function(err, exportFile) {
                 next(err, exportFile);
             });
-        });
     };
 
 
     this.removeEquipment = function(exportfileId, payload, next) {
         var bulk = ExportFile.initializeOrderedBulkOp();
 
-        bulk.find({
-            '_id': new ObjectID(exportfileId)
-        }).updateOne({
-            '$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}},
-        });
-        bulk.find({
-            '_id': new ObjectID(exportfileId)
-        }).updateOne({
-            '$pull': {'equipments': {'number': payload.equipment.number}},
-        });
+        bulk.find({'_id': new ObjectID(exportfileId)})
+        .updateOne({'$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}}});
+        bulk.find({'_id': new ObjectID(exportfileId)})
+        .updateOne({'$pull': {'equipments': {'number': payload.equipment.number}}});
 
         bulk.execute(function(err, result) {
             if (err) {
@@ -148,9 +139,7 @@ function ExportFileHandler() {
     this.create = function(next) {
         var exportFile = new ExportFile();
         countCompanies().then(function(count) {
-            Promise.join(findOneCompany(count), findOneCompany(
-                    count),
-                findOneCompany(count), findOneCompany(count),
+            Promise.join(findOneCompany(count), findOneCompany(count), findOneCompany(count), findOneCompany(count),
                 function(forwarder, shippingAgent, terminal,
                     depot) {
                     exportFile.shipping_agent = company2Nad(shippingAgent);
@@ -226,8 +215,8 @@ function ExportFileHandler() {
                             notified_at: newDate()
                         }
                     };
-                    exportFile.created_at = newDate();
-                    exportFile.modified_at = exportFile.created_at;
+                    exportFile.created_on = newDate();
+                    exportFile.modified_on = exportFile.created_at;
                     exportFile.file_type = 'EF_FF';
                     exportFile.file_owner = exportFile.freight_forwarder.code;
                     exportFile.save(function(err) {
