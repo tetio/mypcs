@@ -38,20 +38,20 @@ function CompanyHandler() {
         company.city = chance.city();
         company.region = chance.province({ full: true });
         company.country = chance.country({ full: true });
-        company.postal_code = chance.postal();
+        company.postalCode = chance.postal();
         company.phone = chance.phone();
         company.fax = chance.phone();
         company.situation = 'A';
-        company.last_modification = new Date();
+        company.lastModification = new Date();
         var first = chance.first();
         var last = chance.last();
         var contact = {
-            first_name: first,
-            last_name: last,
+            firstName: first,
+            lastName: last,
             mobile: chance.phone(),
             email: first.toLocaleLowerCase() + '.' + last.toLocaleLowerCase() + '@' + domain
         };
-        company.primary_contact = contact;
+        company.primaryContact = contact;
         company.save(function (err) {
             if (err) {
                 next(err);

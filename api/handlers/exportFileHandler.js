@@ -27,7 +27,7 @@ function ExportFileHandler() {
             queryCriteria.file_owner = criteria.file_owner;
         }
         if (criteria.booking_number !== undefined) {
-            queryCriteria['booking_info.booking_number'] = criteria.booking_number;
+            queryCriteria['bookingInfo.bookingNumber'] = criteria.booking_number;
         }
         if (criteria.equipment_number !== undefined) {
             queryCriteria['equipments.number'] = criteria.equipment_number;
@@ -71,9 +71,9 @@ function ExportFileHandler() {
     this.create = function(payload, next) {
         var ef = new ExportFile();
         ef.file_owner = payload.file_owner;
-        ef.created_at = new Date();
-        ef.modified_at = ef.created_at;
-        ef.booking_info.booking_number = payload.booking_number;
+        ef.createdOn = new Date();
+        ef.modifiedOn = ef.created_at;
+        ef.bookingInfo.bookingNumber = payload.bookingNumber;
     };
 
     this.addEquipment = function(exportfileId, payload, next) {
@@ -89,7 +89,7 @@ function ExportFileHandler() {
     this.removeEquipment2Calls = function(exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
         var query = {_id: objectId};
-        var updateSGP = {$pull: {'split_goods_placement': {equipment_number: payload.equipment.number}}};
+        var updateSGP = {$pull: {'splitGoodsPlacement': {equipmentNumber: payload.equipment.number}}};
         var updateEQD = {$pull: {equipments: {number: payload.equipment.number}}};
         Promise.join(findAndModify(query, [], updateEQD, {'multi': false}), findAndModify(query, [], updateSGP, {'multi': false}),
             function(err, exportFile) {
@@ -102,7 +102,7 @@ function ExportFileHandler() {
         var bulk = ExportFile.initializeOrderedBulkOp();
 
         bulk.find({'_id': new ObjectID(exportfileId)})
-        .updateOne({'$pull': {'split_goods_placement': {'equipment_number': payload.equipment.number}}});
+        .updateOne({'$pull': {'splitGoodsPlacement': {'equipmentNumber': payload.equipment.number}}});
         bulk.find({'_id': new ObjectID(exportfileId)})
         .updateOne({'$pull': {'equipments': {'number': payload.equipment.number}}});
 
@@ -142,10 +142,10 @@ function ExportFileHandler() {
             Promise.join(findOneCompany(count), findOneCompany(count), findOneCompany(count), findOneCompany(count),
                 function(forwarder, shippingAgent, terminal,
                     depot) {
-                    exportFile.shipping_agent = company2Nad(shippingAgent);
-                    exportFile.freight_forwarder = company2Nad(forwarder);
-                    exportFile.container_terminal = company2Nad(terminal);
-                    exportFile.container_depot = company2Nad(depot);
+                    exportFile.shippingAgent = company2Nad(shippingAgent);
+                    exportFile.freightForwarder = company2Nad(forwarder);
+                    exportFile.containerTerminal = company2Nad(terminal);
+                    exportFile.containerDepot = company2Nad(depot);
                     // equipments
                     var numEquip = Math.floor(Math.random() * 4) +1;
                     console.log('numEquip=' + numEquip);
@@ -157,13 +157,13 @@ function ExportFileHandler() {
                             }),
                             reference: "ref1",
                             type: "2200",
-                            unit_gross_wight: "KG",
-                            total_gross_weight: chance.integer({
+                            unitGrossWeight: "KG",
+                            totalGrossWeight: chance.integer({
                                 min: 13000,
                                 max: 13999
                             }),
-                            unit_net_weight: "KG",
-                            total_net_weight: chance.integer({
+                            unitNetWeight: "KG",
+                            totalNetWeight: chance.integer({
                                 min: 12000,
                                 max: 12999
                             })
@@ -174,7 +174,7 @@ function ExportFileHandler() {
                     for (var j = 0; j < numEquip; j++) {
                         var good = {
                             id: j,
-                            taric_code: '' + chance.integer({
+                            taricCode: '' + chance.integer({
                                 min: 5000000,
                                 max: 9999999
                             }),
@@ -185,7 +185,7 @@ function ExportFileHandler() {
                                 description: 'BARRIL'
                             },
                             situation: 'A',
-                            split_goods_placement: []
+                            splitGoodsPlacement: []
                         };
                         // var sgp = {
                         //         good_id: j,
@@ -200,25 +200,24 @@ function ExportFileHandler() {
                     // split_goods_placement
                     for (var k = 0; k < numEquip; k++) {
                         var sgp = {
-                                good_id: k,
-                                equipment_number: exportFile.equipments[k].number,
-                                package_quantity: (k + 20),
+                                equipmentNumber: exportFile.equipments[k].number,
+                                packageQuantity: (k + 20),
                                 gross_weight: (22000 + (k+20) * 10),
                                 _id: exportFile.equipments[k]._id
                         };
-                        exportFile.split_goods_placement.push(sgp);
+                        exportFile.splitGoodsPlacement.push(sgp);
                     }
 
-                    exportFile.booking_info = {
-                        booking_number: 'BK-' + chance.postal().replace(' ', ''),
+                    exportFile.bookingInfo = {
+                        bookingNumber: 'BK-' + chance.postal().replace(' ', ''),
                         events: {
-                            notified_at: newDate()
+                            notifiedOn: newDate()
                         }
                     };
-                    exportFile.created_on = newDate();
-                    exportFile.modified_on = exportFile.created_at;
-                    exportFile.file_type = 'EF_FF';
-                    exportFile.file_owner = exportFile.freight_forwarder.code;
+                    exportFile.createdOn = newDate();
+                    exportFile.modifiedOn = exportFile.created_at;
+                    exportFile.fileType = 'EF_FF';
+                    exportFile.fileOwner = exportFile.freightForwarder.code;
                     exportFile.save(function(err) {
                         if (err) {
                             next(err);
@@ -234,7 +233,7 @@ function ExportFileHandler() {
         var exportFile = new ExportFile(json);
         exportFile.log(id + "===" + exportFile._id);
         if (id === exportFile._id) {
-            exportFile.last_modification = new Date();
+            exportFile.modificationOn = new Date();
             Company.update({
                 _id: exportFile._id
             }, exportFile, {
@@ -310,11 +309,11 @@ function ExportFileHandler() {
             code: company.code,
             name: company.name,
             email: company.email,
-            address_title: company.address_title,
+            addressTitle: company.addressTitle,
             address: company.address,
             city: company.city,
             region: company.region,
-            postal_code: company.postal_code,
+            postalCode: company.postalCode,
             country: company.country,
             phone: company.phone,
             fax: company.fax

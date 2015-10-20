@@ -14,7 +14,7 @@ var exportFileHandler = new ExportFile();
 
 // Mongo and Mongoose
 var mongoose = require('mongoose');
-var dbURI = require("./config/env.json")[process.env.NODE_ENV || 'development']["MONGO_URI"];
+var dbURI = require("./config/env.json")[process.env.NODE_ENV || 'local']["MONGO_URI"];
 var dbOptions = {
     server: {
         socketOptions: {

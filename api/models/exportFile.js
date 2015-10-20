@@ -5,57 +5,57 @@ var Equipment = new mongoose.Schema({
     reference: String,
     type: String,
     seals: [String],
-    unit_gross_wight: String,
-    total_gross_weight: String,
-    unit_net_weight: String,
-    total_net_weight: String,
+    unitGrossWight: String,
+    totalGrossWeight: String,
+    unitNetWeight: String,
+    totalNetWeight: String,
     events: {
-        ingate_estimated: Date,
-        ingate_datetime: Date,
-        unloaded_datetime: Date,
-        loaded_datetime: Date
+        ingateEstimated: Date,
+        ingateDatetime: Date,
+        unloadedDatetime: Date,
+        loadedDatetime: Date
     },
     reefer_info: {
-        air_flow_volume: String,
-        co2_level: String,
-        n2_level: String,
-        o2_level: String,
-        humidity_percentage: String,
-        vents_terminal: String,
-        vents_depot: String
+        airFlowVolume: String,
+        co2Level: String,
+        n2Level: String,
+        o2Level: String,
+        humidityPercentage: String,
+        ventsTerminal: String,
+        ventsDepot: String
     }
 });
 
 var DangerousGood = new mongoose.Schema({
-    hazard_code: {
-        identification_code:String,
-        additional_classification_identifier: String,
-        code_version_identifier: String
+    hazardCode: {
+        identificationCode:String,
+        additionalClassificationIdentifier: String,
+        codeVersionIdentifier: String
     },
-    united_nations_identifier: String,
-    packaging_danger_level_code: String,
-    emergency_procedure_for_ships_identifier: String,
+    unitedNationsIdentifier: String,
+    packagingDangerLevelCode: String,
+    emergencyProcedureForShipsIdentifier: String,
     description: String,
 });
 
 var SplitGoodsPlacement = new mongoose.Schema({
-    equipment_number: String,
-    package_quantity: Number,
-    gross_weight: Number
+    equipmentNumber: String,
+    packageQuantity: Number,
+    grossWeight: Number
 });
 
 var Good = new mongoose.Schema({
-    taric_code: String,
+    taricCode: String,
     description: String,
     package: {
         quantity: Number,
         code: String,
         description: String
     },
-    unit_gross_wight: String,
+    unitGrossWight: String,
     total_gross_weight: String,
-    unit_net_weight: String,
-    total_net_weight: String,
+    unitNetWeight: String,
+    totalNetWeight: String,
     marks: [String],
     temperature: {
         unit: String,
@@ -68,62 +68,62 @@ var Good = new mongoose.Schema({
     },
     situation: String,
     //split_goods_placement: [SplitGoodsPlacement],
-    dangerous_goods: [DangerousGood]
+    dangerousGoods: [DangerousGood]
 });
 
 var ExportFileSchema = new mongoose.Schema({
-    created_on: Date,
-    modified_on: Date,
-    file_type: String,
-    file_owner: String,
-    shipping_agent: {
+    createdOn: Date,
+    modifiedOn: Date,
+    fileType: String,
+    fileOwner: String,
+    shippingAgent: {
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
     },
-    freight_forwarder: {
+    freightForwarder: {
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
     },
-    container_terminal: {
+    containerTerminal: {
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
     },
-    container_depot: {
+    containerDepot: {
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
@@ -132,11 +132,11 @@ var ExportFileSchema = new mongoose.Schema({
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
@@ -145,11 +145,11 @@ var ExportFileSchema = new mongoose.Schema({
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
@@ -158,11 +158,11 @@ var ExportFileSchema = new mongoose.Schema({
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
@@ -171,11 +171,11 @@ var ExportFileSchema = new mongoose.Schema({
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
@@ -184,30 +184,30 @@ var ExportFileSchema = new mongoose.Schema({
         code: String,
         name: String,
         email: String,
-        address_title: String,
+        addressTitle: String,
         address: String,
         city: String,
         region: String,
-        postal_code: String,
+        postalCode: String,
         country: String,
         phone: String,
         fax: String
     },
-    booking_info: {
-        booking_number: String,
+    bookingInfo: {
+        bookingNumber: String,
         events: {
-            requested_on: Date,
-            notified_on: Date
+            requestedOn: Date,
+            notifiedOn: Date
         },
     },
-    freight_forwarder_info: {
-        dossier_reference: String,
-        booking_observations: String
+    freightForwarderInfo: {
+        dossierReference: String,
+        bookingObservations: String
     },
     equipments: [Equipment],
     goods: [Good],
-    split_goods_placement: [SplitGoodsPlacement],
-    dangerous_goods: [DangerousGood]
+    splitGoodsPlacement: [SplitGoodsPlacement],
+    dangerousGoods: [DangerousGood]
 });
 
 
