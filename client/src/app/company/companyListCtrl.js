@@ -34,8 +34,13 @@
                 template: 'app/company/companyEdit.html',
                 className: 'ngdialog-theme-default',
                 showClose: true,
-                closeByDocument: true,
-                closeByEscape: true,
+                backdrop : 'static',
+                // preCloseCallback: function(value) {
+                //     if(confirm('Are you sure you want to close without saving your changes?')) {
+                //         return true;
+                //     }
+                //     return false;
+                // },
                 controller: 'CompanyEditCtrl as vm',
                 resolve: {
                     companyResource: 'companyResource',

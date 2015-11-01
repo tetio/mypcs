@@ -9,5 +9,6 @@
     function CompanyEditCtrl(company) {
         var vm = this;
         vm.company = company;
+
     }
 } ());
