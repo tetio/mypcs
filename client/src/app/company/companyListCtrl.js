@@ -3,10 +3,10 @@
     angular
         .module('pcsManagement')
         .controller('CompanyListCtrl',
-            ['companyResource', '$scope', '$timeout',
+            ['companyResource', '$scope', '$timeout', 'ngDialog',
                 CompanyListCtrl]);
 
-    function CompanyListCtrl(companyResource, $scope, $timeout) {
+    function CompanyListCtrl(companyResource, $scope, $timeout, ngDialog) {
         var vm = this;
 
         vm.search = '';
@@ -18,14 +18,40 @@
                 vm.gridOptions.data = data;
                 if (data.length > 0) {
                     vm.gridApi.grid.modifyRows(vm.gridOptions.data);
-                    vm.gridApi.selection.selectRow(vm.gridOptions.data[0]);
+                    // vm.gridApi.selection.selectRow(vm.gridOptions.data[0]);
                 }
             });
         };
 
+        vm.createCompany = function () {
+            vm.newCompany = null;
+            ngDialog.open({ template: 'app/company/companyCreate.html' });
+        };
+
+        vm.editCompany = function () {
+            vm.newCompany = null;
+            ngDialog.open({
+                template: 'app/company/companyEdit.html',
+                className: 'ngdialog-theme-default',
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                controller: 'CompanyEditCtrl as vm',
+                resolve: {
+                    companyResource: 'companyResource',
+                    company: function (companyResource) {
+                        return companyResource.get({ companyId: vm.selectedCompany._id }).$promise;
+                    }
+                }
+            });
+        };
 
         vm.showSelected = function () {
             console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
+        };
+
+        vm.isSelected = function() {
+            return vm.selectedCompany !== null;
         };
 
 

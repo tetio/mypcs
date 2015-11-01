@@ -28,7 +28,7 @@
             })
             .state('companyEdit', {
                 url: '/company/edit/:companyId',
-                templateUrl: 'app/company/companyListView.html',
+                templateUrl: 'app/company/companyEditView.html',
                 controller: 'CompanyEditCtrl as vm',
                 resolve: {
                     companyResource: 'companyResource',

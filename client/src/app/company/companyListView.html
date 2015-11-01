@@ -1,28 +1,33 @@
 <div class="panel panel-primary">
-    <div class="panel-heading" style="font-size:large">Companies
+    <div class="panel-heading" >
+        <div class="row">
+            <div class="col-sm-2" style="font-size:large">Companies</div>
+            <div class="col-sm-10 text-right">
+                <button type="button" class="btn btn-warning btn-s" ng-click='vm.createCompany()'>+</button>
+            </div>
+        </div>
     </div>
 
     <div class="panel-body">
-                <form name="FormBusqueda">
-                    <div class="col-sm-2">
-                        <!-- ng-pattern="/\w{2}/"  -->
-                        <input focus-me type="buscador" class="form-control" placeholder="Enter text (min 3 chars)" ng-model='vm.search' ng-enter="vm.findCompanies()"
-                        required>
-                    </div>
-                    <div class="col-sm-8">
-                        <button class="btn btn-primary btn-s" ng-click="vm.findCompanies()">Search</button>
-                        <!-- ng-disabled="!bBusquedaPermitida()" -->
-                    </div>
-                </form>
-                <div class="col-sm-2 text-right">
-                    <button type="button" class="btn btn-primary btn-s" ng-show="!bAppReadOnly()" ng-click='crearEmpresa()'>+</button>
-                </div>
+        <form class="form-horizontal" name="FormBusqueda">
+            <div class="col-sm-2">
+                <!-- ng-pattern="/\w{2}/"  -->
+                <input focus-me type="buscador" class="form-control" placeholder="Enter text (min 3 chars)" ng-model='vm.search' ng-enter="vm.findCompanies()"
+                required>
             </div>
-            <div class="overlay" ng-show='bHayQueGuardar()'></div>
-        <section>
-            <!--<button ng-click='vm.findCompanies()'>Fetch</button>
-            <button ng-click='vm.showSelected()'>Info</button>-->
-            <div ui-grid="vm.gridOptions" ui-grid-selection ></div>
-        </section>
+            <div class="col-sm-8">
+                <button class="btn btn-primary btn-s" ng-click="vm.findCompanies()">Search</button>
+                <!-- ng-disabled="!bBusquedaPermitida()" -->
+            </div>
+        </form>
+        <div class="col-sm-2 text-right">
+            <button type="button" class="btn btn-primary btn-s" ng-show="vm.isSelected()" ng-click='vm.editCompany()'>Edit</button>
+        </div>
     </div>
+    <div class="overlay" ng-show='bHayQueGuardar()'></div>
+    <section>
+        <!--<button ng-click='vm.findCompanies()'>Fetch</button>
+        <button ng-click='vm.showSelected()'>Info</button>-->
+        <div ui-grid="vm.gridOptions" ui-grid-selection ></div>
+    </section>
 </div>
