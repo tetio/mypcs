@@ -63,17 +63,17 @@ function CompanyHandler() {
     this.update = function (id, json, next) {
         var company = new Company(json);
         console.log(id + "===" + company._id);
-        if (id === company._id) {
+        // if (id === company._id) {
             company.last_modification = new Date();
-            Company.update({ _id: company._id }, company, { upsert: false }, function (err) {
+            Company.update({ _id: id }, company, { upsert: false }, function (err) {
                 if (err) {
                     next(err);
                 }
                 next(null, company);
             });
-        } else {
-            next();
-        }
+        // } else {
+        //     next();
+        // }
     };
 }
 

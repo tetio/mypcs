@@ -62,7 +62,7 @@ router.route('/company')
         });
     })
     .post(function(req, res) {
-        companyHandler.create(function(err, company) {
+        companyHandler.update(req.body._id, req.body, function(err, company) {
             if (err) {
                 res.send(err);
             }

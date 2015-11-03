@@ -1,10 +1,10 @@
 (function () {
     'use strict';
     angular
-        .module('pcsManagement')
-        .controller('CompanyListCtrl',
-            ['companyResource', '$scope', '$timeout', 'ngDialog',
-                CompanyListCtrl]);
+    .module('pcsManagement')
+    .controller('CompanyListCtrl',
+    ['companyResource', '$scope', '$timeout', 'ngDialog',
+    CompanyListCtrl]);
 
     function CompanyListCtrl(companyResource, $scope, $timeout, ngDialog) {
         var vm = this;
@@ -13,6 +13,7 @@
         vm.selectedCompany = null;
 
         vm.findCompanies = function () {
+            vm.gridOptions.data = [];
             console.log('findCompanies');
             companyResource.query(function (data) {
                 vm.gridOptions.data = data;
@@ -29,18 +30,9 @@
         };
 
         vm.editCompany = function () {
-            vm.newCompany = null;
-            ngDialog.open({
+            ngDialog.openConfirm({
                 template: 'app/company/companyEdit.html',
                 className: 'ngdialog-theme-default',
-                showClose: true,
-                backdrop : 'static',
-                // preCloseCallback: function(value) {
-                //     if(confirm('Are you sure you want to close without saving your changes?')) {
-                //         return true;
-                //     }
-                //     return false;
-                // },
                 controller: 'CompanyEditCtrl as vm',
                 resolve: {
                     companyResource: 'companyResource',
@@ -48,6 +40,12 @@
                         return companyResource.get({ companyId: vm.selectedCompany._id }).$promise;
                     }
                 }
+            }).then(function (value) {
+                value.$save(function (data) {
+                    vm.findCompanies();
+                });
+            }, function (reason) {
+                console.log('Modal promise rejected. Reason: ', reason);
             });
         };
 
