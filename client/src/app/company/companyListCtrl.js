@@ -1,10 +1,10 @@
 (function () {
     'use strict';
     angular
-    .module('pcsManagement')
-    .controller('CompanyListCtrl',
-    ['companyResource', '$scope', '$timeout', 'ngDialog',
-    CompanyListCtrl]);
+        .module('pcsManagement')
+        .controller('CompanyListCtrl',
+            ['companyResource', '$scope', '$timeout', 'ngDialog',
+                CompanyListCtrl]);
 
     function CompanyListCtrl(companyResource, $scope, $timeout, ngDialog) {
         var vm = this;
@@ -41,6 +41,7 @@
                     }
                 }
             }).then(function (value) {
+                value.lastModification = new Date();
                 value.$save(function (data) {
                     vm.findCompanies();
                 });
@@ -53,13 +54,13 @@
             console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
         };
 
-        vm.isSelected = function() {
+        vm.isSelected = function () {
             return vm.selectedCompany !== null;
         };
 
 
         vm.gridOptions = {
-            enableSorting: false,
+            enableSorting: true,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             multiSelect: false,
@@ -75,11 +76,9 @@
                 console.log('getCurrentSelection code: ' + vm.selectedCompany.code);
 
             });
-
             gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
                 var msg = 'rows changed ' + rows.length;
                 console.log(msg);
-
             });
         };
         //vm.gridOptions.data = 'vm.companies';
@@ -88,7 +87,7 @@
             { field: 'name' },
             { field: 'code', width: 100 },
             { field: 'situation', width: 100 },
-            { field: 'last_modification', cellFilter: 'date:"dd/MM/yyyy HH:mm"', type: 'date', width: 150 }
+            { field: 'lastModification', cellFilter: 'date:"dd/MM/yyyy HH:mm"', type: 'date', width: 150 }
         ];
     }
 } ());

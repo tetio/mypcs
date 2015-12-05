@@ -1,54 +1,84 @@
 <div class="ngdialog-message">
-<!-- <div class="panel panel-primary">
+    <!-- <div class="panel panel-primary">
     <div class="panel-heading"> -->
-        <div class="row">
-            <div class="col-sm-10" style="font-size:large"><H3>Editing company: {{vm.company.name}}</H3></div>
-            <!-- <div class="col-sm-2 text-right">
+    <div class="row">
+        <div class="col-sm-10" style="font-size:large">
+            <H3>Editing company: {{vm.company.name}}</H3>
+        </div>
+        <!-- <div class="col-sm-2 text-right">
                 <button type="button" class="btn btn-danger btn-s" ng-click='vm.close*()'>X</button>
             </div> -->
-        </div>
+    </div>
     <!-- </div>
     <div class="panel-body"> -->
-        <div class="row">
-            <div class="col-md-2">Name:</div>
-            <div class="col-md-4"><input ng-model="vm.company.name" /></div>
-            <div class="col-md-2">Code:</div>
-            <div class="col-md-4">{{vm.company.code}}</div>
+    <div class="row">
+        <div class="col-md-2">Name:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.name" />
         </div>
-        <div class="row">
-            <div class="col-md-2">Address:</div>
-            <div class="col-md-4">{{vm.company.address}}</div>
-            <div class="col-md-2">Region:</div>
-            <div class="col-md-4">{{vm.company.region}}</div>
+        <div class="col-md-2">Code:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.code" />
         </div>
-        <div class="row">
-            <div class="col-md-2">City:</div>
-            <div class="col-md-4">{{vm.company.city}}</div>
-            <div class="col-md-2">Postal code:</div>
-            <div class="col-md-4">{{vm.company.postalCode}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Address:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.address" />
         </div>
-        <div class="row">
-            <div class="col-md-2">Country:</div>
-            <div class="col-md-4">{{vm.company.country}}</div>
-            <div class="col-md-2">Phone:</div>
-            <div class="col-md-4">{{vm.company.phone}}</div>
+        <div class="col-md-2">Region:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.region" />
         </div>
-        <div class="row">
-            <div class="col-md-2">Fax:</div>
-            <div class="col-md-4">{{vm.company.fax}}</div>
-            <div class="col-md-2">Situation:</div>
-            <div class="col-md-4">{{vm.company.situation}}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">City:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.city" />
         </div>
-        <div class="row">
-            <div class="col-md-2">Last modification:</div>
-            <div class="col-md-4">{{vm.company.lastModification | date:"dd/MM/yyyy 'at' h:mma"}}</div>
-            <div class="col-md-2">eMail:</div>
-            <div class="col-md-4"><input ng-model="vm.company.email" /></div>
+        <div class="col-md-2">Postal code:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.postalCode" />
         </div>
-        <div class="ngdialog-buttons">
-			<button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm(vm.company)">Confirm</button>
-			<button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
-		</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Country:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.country" />
+        </div>
+        <div class="col-md-2">Phone:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.phone" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Fax:</div>
+        <div class="col-md-4">
+            <input class="form-control" ng-model="vm.company.fax" />
+        </div>
+        <div class="col-md-2">Situation:</div>
+        <div class="col-md-4">
+            <select name="singleSelect" ng-model="vm.company.situation">
+                <option value="A">Active</option>
+                <option value="I">Inactive</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <!-- <div class="col-md-2">Last modification:</div>
+            <div class="col-md-4">{{vm.company.lastModification | date:"dd/MM/yyyy 'at' h:mma"}}</div> -->
+        <div class="col-md-2">eMail:</div>
+        <div class="col-md-8">
+            <input class="form-control" ng-model="vm.company.email" />
+        </div>
+    </div>
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm(vm.company)">Confirm</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+    </div>
     <!-- </div>
 </div> -->
 </div>

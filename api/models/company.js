@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
 
-var CompanySchema = new mongoose.Schema({
-    code: String,
-    name: String,
+var companySchema = {
+    code: {type: String, required: true},
+    name: {type: String, required: true},
     primaryContact: {
       title: String,
       firstName: String,
@@ -30,6 +30,10 @@ var CompanySchema = new mongoose.Schema({
       validTo: Date
     }]
 
-});
+};
+var schema = new mongoose.Schema(companySchema);
 
-module.exports = mongoose.model('Company', CompanySchema);
+// Virtuals
+
+module.exports = schema;
+module.exports.companySchema = companySchema;

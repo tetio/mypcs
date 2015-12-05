@@ -1,223 +1,52 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 
-var Equipment = new mongoose.Schema({
-    number: String,
-    reference: String,
-    type: String,
-    seals: [String],
-    unitGrossWight: String,
-    totalGrossWeight: String,
-    unitNetWeight: String,
-    totalNetWeight: String,
-    events: {
-        ingateEstimated: Date,
-        ingateDatetime: Date,
-        unloadedDatetime: Date,
-        loadedDatetime: Date
-    },
-    reefer_info: {
-        airFlowVolume: String,
-        co2Level: String,
-        n2Level: String,
-        o2Level: String,
-        humidityPercentage: String,
-        ventsTerminal: String,
-        ventsDepot: String
-    }
-});
+var Company = require('./company');
+var Equipment = require('./equipment');
+var Good = require('./good');
+var SplitGoodsPlacement = require('./splitGoodsPlacement');
 
-var DangerousGood = new mongoose.Schema({
-    hazardCode: {
-        identificationCode:String,
-        additionalClassificationIdentifier: String,
-        codeVersionIdentifier: String
-    },
-    unitedNationsIdentifier: String,
-    packagingDangerLevelCode: String,
-    emergencyProcedureForShipsIdentifier: String,
-    description: String,
-});
 
-var SplitGoodsPlacement = new mongoose.Schema({
-    equipmentNumber: String,
-    packageQuantity: Number,
-    grossWeight: Number
-});
 
-var Good = new mongoose.Schema({
-    taricCode: String,
-    description: String,
-    package: {
-        quantity: Number,
-        code: String,
-        description: String
-    },
-    unitGrossWight: String,
-    total_gross_weight: String,
-    unitNetWeight: String,
-    totalNetWeight: String,
-    marks: [String],
-    temperature: {
-        unit: String,
-        max: Number,
-        min: Number
-    },
-    volume: {
-        unit: String,
-        value: Number
-    },
-    situation: String,
-    //split_goods_placement: [SplitGoodsPlacement],
-    dangerousGoods: [DangerousGood]
-});
-
-var ExportFileSchema = new mongoose.Schema({
-    createdOn: Date,
-    modifiedOn: Date,
-    fileType: String,
-    fileOwner: String,
-    shippingAgent: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    freightForwarder: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    containerTerminal: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    containerDepot: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    shipper: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    consignee: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    notify: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    carrier: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    haulier: {
-        code: String,
-        name: String,
-        email: String,
-        addressTitle: String,
-        address: String,
-        city: String,
-        region: String,
-        postalCode: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
+var exportFileSchema = {
+    createdOn: {type: Date, required: true},
+    modifiedOn: {type: Date, required: true},
+    fileType: {type: String, required: true},
+    fileOwner: {type: String, required: true},
+    shippingAgent: Company.companySchema,
+    freightForwarder: Company.companySchema,
+    containerTerminal: Company.companySchema,
+    containerDepot: Company.companySchema,
+    shipper: {type: Company.companySchema, required: false},
+    consignee: {type: Company.companySchema, required: false},
+    notify: {type: Company.companySchema, required: false},
+    carrier: {type: Company.companySchema, required: false},
+    haulier: {type: Company.companySchema, required: false},
     bookingInfo: {
-        bookingNumber: String,
+        bookingNumber: {type: String, required: true},
         events: {
-            requestedOn: Date,
-            notifiedOn: Date
+            requestedOn: {type: Date, required: false},
+            notifiedOn: {type: Date, required: false}
         },
     },
     freightForwarderInfo: {
-        dossierReference: String,
-        bookingObservations: String
+        dossierReference: {type: String, required: false},
+        bookingObservations: {type: String, required: false}
     },
-    equipments: [Equipment],
-    goods: [Good],
-    splitGoodsPlacement: [SplitGoodsPlacement],
-    dangerousGoods: [DangerousGood]
-});
+    equipments: [Equipment.equipmentSchema],
+    goods: [Good.goodSchema],
+    splitGoodsPlacement: [SplitGoodsPlacement.splitGoodsPlacementSchema]
+};
 
+var schema = new mongoose.Schema(exportFileSchema);
 
-ExportFileSchema.statics.findAndModify = function (query, sort, doc, options, callback) {
+schema.statics.findAndModify = function (query, sort, doc, options, callback) {
   return this.collection.findAndModify(query, sort, doc, options, callback);
 };
 
 
-ExportFileSchema.statics.initializeOrderedBulkOp = function () {
+schema.statics.initializeOrderedBulkOp = function () {
   return this.collection.initializeOrderedBulkOp();
 };
 
-module.exports = mongoose.model('ExportFile', ExportFileSchema);
+module.exports = schema;
+module.exports.exportFileSchema = exportFileSchema;

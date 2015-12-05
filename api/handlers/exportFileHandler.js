@@ -1,12 +1,24 @@
 var Promise = require('bluebird');
-// models
-var ObjectID = require('mongodb').ObjectID;
-var ExportFile = require('../models/exportFile');
-var Company = require('../models/company');
+var mongoose = require('mongoose');
 // Load Chance
 var Chance = require('chance');
 // Instantiate Chance so it can be used
 var chance = new Chance();
+
+// models
+var ObjectID = require('mongodb').ObjectID;
+var companySchema = require('../models/company');
+var Company = mongoose.model('Company', companySchema);
+var equipmentSchema = require('../models/equipment');
+var goodSchema = require('../models/good');
+var splitGoodsPlacementSchema = require('../models/splitGoodsPlacement');
+var exportFileSchema = require('../models/exportFile');
+
+var Equipment = mongoose.model('Equipment', equipmentSchema);
+var Good = mongoose.model('Good', goodSchema);
+var ExportFile = mongoose.model('ExportFile', exportFileSchema);
+var SplitGoodsPlacement = mongoose.model('SplitGoodsPlacement', splitGoodsPlacementSchema);
+
 
 function ExportFileHandler() {
 
@@ -21,7 +33,7 @@ function ExportFileHandler() {
     // db.getCollection('exportfiles').find({file_owner: 'OK07913', modified_at: {$gt: new Date(2005,0,1)}, modified_at: {$lt: new Date(2015,8,31)}})
 
 
-    this.findByCriteria = function(criteria, next) {
+    this.findByCriteria = function (criteria, next) {
         var queryCriteria = {};
         if (criteria.file_owner !== undefined) {
             queryCriteria.file_owner = criteria.file_owner;
@@ -39,7 +51,7 @@ function ExportFileHandler() {
             $lt: new Date()
         };
         console.log(queryCriteria);
-        ExportFile.find(queryCriteria).limit(10).exec(function(err, exportFiles) {
+        ExportFile.find(queryCriteria).limit(10).exec(function (err, exportFiles) {
             if (err) {
                 next(err);
             }
@@ -48,8 +60,8 @@ function ExportFileHandler() {
     };
 
 
-    this.findById = function(id, next) {
-        ExportFile.findById(id, function(err, exportFile) {
+    this.findById = function (id, next) {
+        ExportFile.findById(id, function (err, exportFile) {
             if (err) {
                 next(err);
             }
@@ -59,8 +71,8 @@ function ExportFileHandler() {
 
 
     // Search all limited to 20
-    this.find = function(next) {
-        ExportFile.find().limit(20).exec(function(err, exportFiles) {
+    this.find = function (next) {
+        ExportFile.find().limit(20).exec(function (err, exportFiles) {
             if (err) {
                 next(err);
             }
@@ -68,7 +80,7 @@ function ExportFileHandler() {
         });
     };
 
-    this.create = function(payload, next) {
+    this.create = function (payload, next) {
         var ef = new ExportFile();
         ef.file_owner = payload.file_owner;
         ef.createdOn = new Date();
@@ -76,37 +88,37 @@ function ExportFileHandler() {
         ef.bookingInfo.bookingNumber = payload.bookingNumber;
     };
 
-    this.addEquipment = function(exportfileId, payload, next) {
+    this.addEquipment = function (exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
-        var query = {_id: objectId};
-        var update = {$push: {equipments: payload.equipment}};
-        findAndModify(query, [], update, {'new': true})
-        .then(function(err, exportFile) {
-            next(err, exportFile) ;
-        });
+        var query = { _id: objectId };
+        var update = { $push: { equipments: payload.equipment } };
+        findAndModify(query, [], update, { 'new': true })
+            .then(function (err, exportFile) {
+                next(err, exportFile);
+            });
     };
 
-    this.removeEquipment2Calls = function(exportfileId, payload, next) {
+    this.removeEquipment2Calls = function (exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
-        var query = {_id: objectId};
-        var updateSGP = {$pull: {'splitGoodsPlacement': {equipmentNumber: payload.equipment.number}}};
-        var updateEQD = {$pull: {equipments: {number: payload.equipment.number}}};
-        Promise.join(findAndModify(query, [], updateEQD, {'multi': false}), findAndModify(query, [], updateSGP, {'multi': false}),
-            function(err, exportFile) {
+        var query = { _id: objectId };
+        var updateSGP = { $pull: { 'splitGoodsPlacement': { equipmentNumber: payload.equipment.number } } };
+        var updateEQD = { $pull: { equipments: { number: payload.equipment.number } } };
+        Promise.join(findAndModify(query, [], updateEQD, { 'multi': false }), findAndModify(query, [], updateSGP, { 'multi': false }),
+            function (err, exportFile) {
                 next(err, exportFile);
             });
     };
 
 
-    this.removeEquipment = function(exportfileId, payload, next) {
+    this.removeEquipment = function (exportfileId, payload, next) {
         var bulk = ExportFile.initializeOrderedBulkOp();
 
-        bulk.find({'_id': new ObjectID(exportfileId)})
-        .updateOne({'$pull': {'splitGoodsPlacement': {'equipmentNumber': payload.equipment.number}}});
-        bulk.find({'_id': new ObjectID(exportfileId)})
-        .updateOne({'$pull': {'equipments': {'number': payload.equipment.number}}});
+        bulk.find({ '_id': new ObjectID(exportfileId) })
+            .updateOne({ '$pull': { 'splitGoodsPlacement': { 'equipmentNumber': payload.equipment.number } } });
+        bulk.find({ '_id': new ObjectID(exportfileId) })
+            .updateOne({ '$pull': { 'equipments': { 'number': payload.equipment.number } } });
 
-        bulk.execute(function(err, result) {
+        bulk.execute(function (err, result) {
             if (err) {
                 next(err);
             }
@@ -115,64 +127,70 @@ function ExportFileHandler() {
     };
 
 
-    this.updateEquipment = function(exportfileId, payload, next) {
+    this.updateEquipment = function (exportfileId, payload, next) {
         var objectId = new ObjectID(exportfileId);
-        var query = {_id: objectId};
-        var update = {$pull: {equipments: {number: payload.equipment.number}}};
-        findAndModify(query, [], update, {'multi': false})
-        .then(function(err, exportFile) {
-            update = {$push: {equipments: payload.equipment}};
-            findAndModify(query, [], update, {'new': true})
-            .then(function(err, exportFile) {
-                next(err, exportFile);
+        var query = { _id: objectId };
+        var update = { $pull: { equipments: { number: payload.equipment.number } } };
+        findAndModify(query, [], update, { 'multi': false })
+            .then(function (err, exportFile) {
+                var update = { $push: { equipments: payload.equipment } };
+                findAndModify(query, [], update, { 'new': true })
+                    .then(function (err, exportFile) {
+                        next(err, exportFile);
+                    });
             });
-        });
 
     };
 
-    this.addGood = function(payload, next) {};
+    this.addGood = function (payload, next) { };
 
-    this.addSplitGoodPartition = function(payload, next) {};
+    this.addSplitGoodPartition = function (payload, next) { };
 
-    this.addAgent = function(payload, next) {};
+    this.addAgent = function (payload, next) { };
 
-    this.create = function(next) {
+    this.create = function (next) {
         var exportFile = new ExportFile();
-        countCompanies().then(function(count) {
+        countCompanies().then(function (count) {
             Promise.join(findOneCompany(count), findOneCompany(count), findOneCompany(count), findOneCompany(count),
-                function(forwarder, shippingAgent, terminal,
-                    depot) {
-                    exportFile.shippingAgent = company2Nad(shippingAgent);
+                function (forwarder, shippingAgent, terminal, depot) {
+/*                    exportFile.shippingAgent = company2Nad(shippingAgent);
                     exportFile.freightForwarder = company2Nad(forwarder);
                     exportFile.containerTerminal = company2Nad(terminal);
                     exportFile.containerDepot = company2Nad(depot);
+*/
+                    exportFile.shippingAgent = shippingAgent;
+                    exportFile.freightForwarder = forwarder;
+                    exportFile.containerTerminal = terminal;
+                    exportFile.containerDepot = depot;
+
+
                     // equipments
-                    var numEquip = Math.floor(Math.random() * 4) +1;
+                    var numEquip = Math.floor(Math.random() * 4) + 1;
                     console.log('numEquip=' + numEquip);
                     for (var i = 0; i < numEquip; i++) {
-                        var equipment = {
-                            number: "MMMU" + chance.integer({
+                        var equipment = new Equipment({
+                            number: 'MMMU' + chance.integer({
                                 min: 1000000,
                                 max: 9999999
                             }),
-                            reference: "ref1",
-                            type: "2200",
-                            unitGrossWeight: "KG",
+                            reference: 'ref1',
+                            type: '2200',
+                            unitGrossWeight: 'KG',
                             totalGrossWeight: chance.integer({
                                 min: 13000,
                                 max: 13999
                             }),
-                            unitNetWeight: "KG",
+                            unitNetWeight: 'KG',
                             totalNetWeight: chance.integer({
                                 min: 12000,
                                 max: 12999
                             })
-                        };
+                        });
                         exportFile.equipments.push(equipment);
                     }
                     // Goods
                     for (var j = 0; j < numEquip; j++) {
-                        var good = {
+                        var good = new Good({
                             id: j,
                             taricCode: '' + chance.integer({
                                 min: 5000000,
@@ -186,7 +204,7 @@ function ExportFileHandler() {
                             },
                             situation: 'A',
                             splitGoodsPlacement: []
-                        };
+                        });
                         // var sgp = {
                         //         good_id: j,
                         //         equipment_number: exportFile.equipments[j].number,
@@ -199,12 +217,12 @@ function ExportFileHandler() {
                     }
                     // split_goods_placement
                     for (var k = 0; k < numEquip; k++) {
-                        var sgp = {
-                                equipmentNumber: exportFile.equipments[k].number,
-                                packageQuantity: (k + 20),
-                                gross_weight: (22000 + (k+20) * 10),
-                                _id: exportFile.equipments[k]._id
-                        };
+                        var sgp = new SplitGoodsPlacement({
+                            equipmentNumber: exportFile.equipments[k].number,
+                            packageQuantity: (k + 20),
+                            gross_weight: (22000 + (k + 20) * 10),
+                            _id: exportFile.equipments[k]._id
+                        });
                         exportFile.splitGoodsPlacement.push(sgp);
                     }
 
@@ -215,10 +233,10 @@ function ExportFileHandler() {
                         }
                     };
                     exportFile.createdOn = newDate();
-                    exportFile.modifiedOn = exportFile.created_at;
+                    exportFile.modifiedOn = exportFile.createdOn;
                     exportFile.fileType = 'EF_FF';
                     exportFile.fileOwner = exportFile.freightForwarder.code;
-                    exportFile.save(function(err) {
+                    exportFile.save(function (err) {
                         if (err) {
                             next(err);
                         }
@@ -229,7 +247,7 @@ function ExportFileHandler() {
     };
 
 
-    this.update = function(id, json, next) {
+    this.update = function (id, json, next) {
         var exportFile = new ExportFile(json);
         exportFile.log(id + "===" + exportFile._id);
         if (id === exportFile._id) {
@@ -237,22 +255,22 @@ function ExportFileHandler() {
             Company.update({
                 _id: exportFile._id
             }, exportFile, {
-                upsert: false
-            }, function(err) {
-                if (err) {
-                    next(err);
-                }
-                next(null, exportFile);
-            });
+                    upsert: false
+                }, function (err) {
+                    if (err) {
+                        next(err);
+                    }
+                    next(null, exportFile);
+                });
         } else {
             // next();
         }
     };
 
     function findOneCompany(count) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var rand = Math.floor(Math.random() * count);
-            Company.findOne().skip(rand).exec(function(err, company) {
+            Company.findOne().skip(rand).exec(function (err, company) {
                 if (err) {
                     reject(err);
                 }
@@ -262,8 +280,8 @@ function ExportFileHandler() {
     }
 
     function countCompanies() {
-        return new Promise(function(resolve, reject) {
-            Company.count({}, function(err, count) {
+        return new Promise(function (resolve, reject) {
+            Company.count({}, function (err, count) {
                 if (err) {
                     reject(err);
                 }
@@ -322,8 +340,8 @@ function ExportFileHandler() {
     }
 
     function findAndModify(query, sort, doc, options, callback) {
-        return new Promise(function(resolve, reject) {
-            ExportFile.findAndModify(query, sort, doc, options, function(err, exportFile) {
+        return new Promise(function (resolve, reject) {
+            ExportFile.findAndModify(query, sort, doc, options, function (err, exportFile) {
                 if (err) {
                     reject(err);
                 }

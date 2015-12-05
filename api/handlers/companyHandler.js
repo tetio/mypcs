@@ -1,5 +1,8 @@
+var mongoose = require("mongoose");
+
 // models
-var Company = require('../models/company');
+var companySchema = require('../models/company');
+var Company = mongoose.model('Company', companySchema);
 // Load Chance
 var Chance = require('chance');
 // Instantiate Chance so it can be used
@@ -64,7 +67,7 @@ function CompanyHandler() {
         var company = new Company(json);
         console.log(id + "===" + company._id);
         // if (id === company._id) {
-            company.last_modification = new Date();
+            company.lastModification = new Date();
             Company.update({ _id: id }, company, { upsert: false }, function (err) {
                 if (err) {
                     next(err);
