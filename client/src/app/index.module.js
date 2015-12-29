@@ -3,6 +3,6 @@
 
   angular
       .module('pcsManagement', ['common.services', 'ngSanitize', 'ngResource',
-          'ui.router', 'ui.bootstrap', 'ngTouch', 'ui.grid', 'ui.grid.selection']);
+          'ui.router', 'ui.bootstrap', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ngDialog']);
 
 })();

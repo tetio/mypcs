@@ -1,177 +1,52 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 
-
-var Equipment = new mongoose.Schema({
-    number: String,
-    reference: String,
-    type: String,
-    seals: [String],
-    unit_gross_wight: String,
-    total_gross_weight: String,
-    unit_net_weight: String,
-    total_net_weight: String,
-    events: {
-        ingate_estimated: Date,
-        ingate_datetime: Date,
-        unloaded_datetime: Date,
-        loaded_datetime: Date
-    },
-    reefer_info: {
-        air_flow_volume: String,
-        co2_level: String,
-        n2_level: String,
-        o2_level: String,
-        humidity_percentage: String,
-        vents_terminal: String,
-        vents_depot: String
-    }
-});
-
-
-var Good = new mongoose.Schema({
-    taric_code: String,
-    description: String
-});
-
-var DangerousGood = new mongoose.Schema({
-    type: String,
-    class: String
-});
+var Company = require('./company');
+var Equipment = require('./equipment');
+var Good = require('./good');
+var SplitGoodsPlacement = require('./splitGoodsPlacement');
 
 
 
-var ExportFileSchema = new mongoose.Schema({
-    shipping_agent: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    freight_forwarder: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    container_terminal: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    container_depot: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    shipper: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    consignee: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    notify: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    carrier: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    haulier: {
-        code: String,
-        name: String,
-        email: String,
-        address_title: String,
-        address: String,
-        city: String,
-        region: String,
-        postal_code: String,
-        country: String,
-        phone: String,
-        fax: String
-    },
-    booking_info: {
-        booking_number: String,
+var exportFileSchema = {
+    createdOn: {type: Date, required: true},
+    modifiedOn: {type: Date, required: true},
+    fileType: {type: String, required: true},
+    fileOwner: {type: String, required: true},
+    shippingAgent: Company.companySchema,
+    freightForwarder: Company.companySchema,
+    containerTerminal: Company.companySchema,
+    containerDepot: Company.companySchema,
+    shipper: {type: Company.companySchema, required: false},
+    consignee: {type: Company.companySchema, required: false},
+    notify: {type: Company.companySchema, required: false},
+    carrier: {type: Company.companySchema, required: false},
+    haulier: {type: Company.companySchema, required: false},
+    bookingInfo: {
+        bookingNumber: {type: String, required: true},
         events: {
-            request_datetime: Date,
-            notification_datetime: Date
+            requestedOn: {type: Date, required: false},
+            notifiedOn: {type: Date, required: false}
         },
     },
-    freight_forwarder_info: {
-        dossier_reference: String,
-        booking_observations: String
+    freightForwarderInfo: {
+        dossierReference: {type: String, required: false},
+        bookingObservations: {type: String, required: false}
     },
-    equipments: [Equipment],
-    goods: [Good],
-    dangerous_goods: [DangerousGood]
-});
+    equipments: [Equipment.equipmentSchema],
+    goods: [Good.goodSchema],
+    splitGoodsPlacement: [SplitGoodsPlacement.splitGoodsPlacementSchema]
+};
 
-module.exports = mongoose.model('ExportFile', ExportFileSchema);
+var schema = new mongoose.Schema(exportFileSchema);
+
+schema.statics.findAndModify = function (query, sort, doc, options, callback) {
+  return this.collection.findAndModify(query, sort, doc, options, callback);
+};
+
+
+schema.statics.initializeOrderedBulkOp = function () {
+  return this.collection.initializeOrderedBulkOp();
+};
+
+module.exports = schema;
+module.exports.exportFileSchema = exportFileSchema;

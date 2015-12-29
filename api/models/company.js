@@ -1,35 +1,39 @@
 var mongoose = require("mongoose");
 
-var CompanySchema = new mongoose.Schema({
-    code: String,
-    name: String,
-    primary_contact: {
+var companySchema = {
+    code: {type: String, required: true},
+    name: {type: String, required: true},
+    primaryContact: {
       title: String,
-      first_name: String,
-      middle_name: String,
-      last_name: String,
+      firstName: String,
+      middleName: String,
+      lastName: String,
       mobile: String,
-      phone_home: String,
+      phoneHome: String,
       email: String,
     },
     web: String,
     email: String,
-    address_title: String,
+    addressTitle: String,
     address: String,
     city: String,
     region: String,
-    postal_code: String,
+    postalCode: String,
     country: String,
     phone: String,
     fax: String,
     situation: String,
-    last_modification: Date,
+    lastModification: Date,
     services: [{
-      service_code: String,
-      valid_from: Date,
-      valid_to: Date
+      serviceCode: String,
+      validFrom: Date,
+      validTo: Date
     }]
 
-});
+};
+var schema = new mongoose.Schema(companySchema);
 
-module.exports = mongoose.model('Company', CompanySchema);
+// Virtuals
+
+module.exports = schema;
+module.exports.companySchema = companySchema;

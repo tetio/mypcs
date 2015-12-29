@@ -1,5 +1,8 @@
+var mongoose = require("mongoose");
+
 // models
-var Company = require('../models/company');
+var companySchema = require('../models/company');
+var Company = mongoose.model('Company', companySchema);
 // Load Chance
 var Chance = require('chance');
 // Instantiate Chance so it can be used
@@ -15,7 +18,7 @@ function CompanyHandler() {
             }
             next(null, company);
         });
-    }
+    };
 
     this.find = function (next) {
         Company.find(function (err, companies) {
@@ -24,13 +27,13 @@ function CompanyHandler() {
             }
             next(null, companies);
         });
-    }
+    };
 
     this.create = function (next) {
         var company = new Company();
         company.code = chance.state() + chance.zip();
         company.name = chance.name();
-        var domain = company.name.replace(' ', '').toLocaleLowerCase() + '.com'
+        var domain = company.name.replace(' ', '').toLocaleLowerCase() + '.com';
         company.web = 'www.' + domain;
         company.email = 'contact@' + domain;
         company.name = company.name + " Ltd.";
@@ -38,43 +41,43 @@ function CompanyHandler() {
         company.city = chance.city();
         company.region = chance.province({ full: true });
         company.country = chance.country({ full: true });
-        company.postal_code = chance.postal();
+        company.postalCode = chance.postal();
         company.phone = chance.phone();
         company.fax = chance.phone();
         company.situation = 'A';
-        company.last_modification = new Date();
+        company.lastModification = new Date();
         var first = chance.first();
         var last = chance.last();
         var contact = {
-            first_name: first,
-            last_name: last,
+            firstName: first,
+            lastName: last,
             mobile: chance.phone(),
             email: first.toLocaleLowerCase() + '.' + last.toLocaleLowerCase() + '@' + domain
-        }
-        company.primary_contact = contact;
+        };
+        company.primaryContact = contact;
         company.save(function (err) {
             if (err) {
                 next(err);
             }
             next(company);
         });
-    }
+    };
 
     this.update = function (id, json, next) {
-        var company = Company(json);
+        var company = new Company(json);
         console.log(id + "===" + company._id);
-        if (id == company._id) {
-            company.last_modification = new Date();
-            Company.update({ _id: company._id }, company, { upsert: false }, function (err) {
+        // if (id === company._id) {
+            company.lastModification = new Date();
+            Company.update({ _id: id }, company, { upsert: false }, function (err) {
                 if (err) {
                     next(err);
                 }
                 next(null, company);
             });
-        } else {
-            next();
-        }
-    }
+        // } else {
+        //     next();
+        // }
+    };
 }
 
 module.exports = CompanyHandler;

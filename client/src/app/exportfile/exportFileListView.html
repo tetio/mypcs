@@ -1,27 +1,21 @@
-<div class="panel panel-primary" ngDialog.closing>
-    <div class="panel-heading" >
-        <div class="row">
-            <div class="col-sm-2" style="font-size:large">Companies</div>
-            <div class="col-sm-10 text-right">
-                <button type="button" class="btn btn-warning btn-s" ng-click='vm.createCompany()'>+</button>
-            </div>
-        </div>
+<div class="panel panel-primary">
+    <div class="panel-heading" style="font-size:large">Export Files
     </div>
 
     <div class="panel-body">
-        <form class="form-horizontal" name="FormBusqueda">
+        <form name="FormBusqueda">
             <div class="col-sm-2">
                 <!-- ng-pattern="/\w{2}/"  -->
                 <input focus-me type="buscador" class="form-control" placeholder="Enter text (min 3 chars)" ng-model='vm.search' ng-enter="vm.findCompanies()"
                 required>
             </div>
             <div class="col-sm-8">
-                <button class="btn btn-primary btn-s" ng-click="vm.findCompanies()">Search</button>
+                <button class="btn btn-primary btn-s" ng-click="vm.findExportFiles()">Search</button>
                 <!-- ng-disabled="!bBusquedaPermitida()" -->
             </div>
         </form>
         <div class="col-sm-2 text-right">
-            <button type="button" class="btn btn-primary btn-s" ng-show="vm.isSelected()" ng-click='vm.editCompany()'>Edit</button>
+            <button type="button" class="btn btn-primary btn-s" ng-show="!bAppReadOnly()" ng-click='crearExportFile()'>+</button>
         </div>
     </div>
     <div class="overlay" ng-show='bHayQueGuardar()'></div>
@@ -30,4 +24,5 @@
         <button ng-click='vm.showSelected()'>Info</button>-->
         <div ui-grid="vm.gridOptions" ui-grid-selection ></div>
     </section>
+</div>
 </div>
