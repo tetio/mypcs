@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var _ = require('underscore');
+var CompanyHandler = require('./handlers/companyHandler');
+var ExportFile = require('./handlers/exportFileHandler');
 
 module.exports = function (wagner) {
     // Init mongoose
@@ -14,16 +16,14 @@ module.exports = function (wagner) {
     mongoose.connect(dbURI, dbOptions);
 
     // The models
-    var Company = mongoose.model('Company', require('./models/company'), 'companies');
-    var ExportFile = mongoose.model('ExportFile', require('./models/exportFile'), 'exportFiles');
-    var CompanyHandler = require('./handlers/companyHandler');
+    var company = mongoose.model('Company', require('./models/company'), 'companies');
+    var exportFile = mongoose.model('ExportFile', require('./models/exportFile'), 'exportFiles');
     var companyHandler = new CompanyHandler();
-    var ExportFile = require('./handlers/exportFileHandler');
     var exportFileHandler = new ExportFile();
 
     var models = {
-        Company: Company,
-        ExportFile: ExportFile,
+        Company: company,
+        ExportFile: exportFile,
         CompanyHandler: companyHandler,
         ExportFileHandler: exportFileHandler
     };
@@ -33,4 +33,4 @@ module.exports = function (wagner) {
             return value;
         });
     });
-}
+};
