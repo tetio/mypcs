@@ -16,10 +16,16 @@ module.exports = function (wagner) {
     // The models
     var Company = mongoose.model('Company', require('./models/company'), 'companies');
     var ExportFile = mongoose.model('ExportFile', require('./models/exportFile'), 'exportFiles');
+    var CompanyHandler = require('./handlers/companyHandler');
+    var companyHandler = new CompanyHandler();
+    var ExportFile = require('./handlers/exportFileHandler');
+    var exportFileHandler = new ExportFile();
 
     var models = {
         Company: Company,
-        ExportFile: ExportFile
+        ExportFile: ExportFile,
+        CompanyHandler: companyHandler,
+        ExportFileHandler: exportFileHandler
     };
 
     _.each(models, function (value, key) {
