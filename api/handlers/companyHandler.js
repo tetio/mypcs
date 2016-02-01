@@ -59,24 +59,20 @@ function CompanyHandler() {
             if (err) {
                 next(err);
             }
-            next(company);
+            next(null, company);
         });
     };
 
     this.update = function (id, json, next) {
         var company = new Company(json);
         console.log(id + "===" + company._id);
-        // if (id === company._id) {
-            company.lastModification = new Date();
-            Company.update({ _id: id }, company, { upsert: false }, function (err) {
-                if (err) {
-                    next(err);
-                }
-                next(null, company);
-            });
-        // } else {
-        //     next();
-        // }
+        company.lastModification = new Date();
+        Company.update({ _id: id }, company, { upsert: false }, function (err) {
+            if (err) {
+                next(err);
+            }
+            next(null, company);
+        });
     };
 }
 
