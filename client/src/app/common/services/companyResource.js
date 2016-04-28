@@ -8,7 +8,7 @@
                  companyResource]);
 
     function companyResource($resource) {
-        return $resource('http://localhost:6161/api/company/:companyId');
+        return $resource('http://localhost:3000/api/v1/company/:_id');
     }
 
 }());

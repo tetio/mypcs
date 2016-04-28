@@ -3,7 +3,7 @@
 
     angular
         .module('common.services')
-        .factory('companyResource',
+        .factory('exportFileResource',
                 ['$resource',
                  exportFileResource]);
 

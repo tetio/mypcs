@@ -7,5 +7,5 @@ var app = express();
 
 app.use('/api/v1', require('./api')(wagner));
 
-app.listen(3000);
-console.log('Listening on port 3000!');
+app.listen(6161);
+console.log('Listening on port 6161!');

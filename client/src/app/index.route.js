@@ -32,12 +32,10 @@
                 controller: 'CompanyEditCtrl as vm',
                 resolve: {
                     companyResource: 'companyResource',
-
                     companies: function (companyResource, $stateParam) {
-                        var companyId = $stateParam.comapnyId;
-                        return companyResource.query({ companyId: companyId }).$promise;
+                        var companyId = $stateParam.companyId;
+                        return companyResource.get({ company_id: companyId}).$promise;
                     }
-
                 }
             })
             .state('exportFileList', {

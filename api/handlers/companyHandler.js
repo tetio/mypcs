@@ -29,7 +29,32 @@ function CompanyHandler() {
         });
     };
 
+
+
     this.create = function (next) {
+        var company = this.createCompany();
+        company.save(function(err) {
+            if (err) {
+                next(err);
+            }
+            next(null, company);
+        });
+    };
+
+    this.update = function (id, json, next) {
+        var company = new Company(json);
+        console.log(id + "===" + company._id);
+        company.lastModification = new Date();
+        Company.update({ _id: id }, company, { upsert: false }, function (err) {
+            if (err) {
+                next(err);
+            }
+            next(null, company);
+        });
+    };
+
+
+    this.createCompany = function(next) {
         var company = new Company();
         company.code = chance.state() + chance.zip();
         company.name = chance.name();
@@ -55,25 +80,8 @@ function CompanyHandler() {
             email: first.toLocaleLowerCase() + '.' + last.toLocaleLowerCase() + '@' + domain
         };
         company.primaryContact = contact;
-        company.save(function (err) {
-            if (err) {
-                next(err);
-            }
-            next(null, company);
-        });
-    };
-
-    this.update = function (id, json, next) {
-        var company = new Company(json);
-        console.log(id + "===" + company._id);
-        company.lastModification = new Date();
-        Company.update({ _id: id }, company, { upsert: false }, function (err) {
-            if (err) {
-                next(err);
-            }
-            next(null, company);
-        });
-    };
+        company.save(next);
+    };    
 }
 
 module.exports = CompanyHandler;

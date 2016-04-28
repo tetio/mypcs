@@ -37,7 +37,7 @@
                 resolve: {
                     companyResource: 'companyResource',
                     company: function (companyResource) {
-                        return companyResource.get({ companyId: vm.selectedCompany._id }).$promise;
+                        return companyResource.get({ _id: vm.selectedCompany._id }).$promise;
                     }
                 }
             }).then(function (value) {

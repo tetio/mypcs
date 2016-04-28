@@ -1,17 +1,18 @@
 var mongoose = require("mongoose");
-
+var PrimaryContact = require('./primaryContact');
 var companySchema = {
     code: {type: String, required: true},
     name: {type: String, required: true},
-    primaryContact: {
-      title: String,
-      firstName: String,
-      middleName: String,
-      lastName: String,
-      mobile: String,
-      phoneHome: String,
-      email: String,
-    },
+    // primaryContact: {
+    //   title: String,
+    //   firstName: String,
+    //   middleName: String,
+    //   lastName: String,
+    //   mobile: String,
+    //   phoneHome: String,
+    //   email: String,
+    // },
+    primaryContact: PrimaryContact.primaryContactSchema, 
     web: String,
     email: String,
     addressTitle: String,

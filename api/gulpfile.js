@@ -29,7 +29,6 @@ gulp.task('lint', function () {
 });
 
 gulp.task('develop', function () {
-//  nodemon({ script: 'server.js',
   nodemon({ script: 'index.js',
             ext: 'html js',
             ignore: ['ignored.js'],
