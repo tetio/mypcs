@@ -1,15 +1,16 @@
 var mongoose = require("mongoose");
 
 // models
-var companySchema = require('../models/company');
-var Company = mongoose.model('Company', companySchema);
+// var companySchema = require('../models/company');
+// var Company = mongoose.model('Company', companySchema);
+
 // Load Chance
 var Chance = require('chance');
 // Instantiate Chance so it can be used
 var chance = new Chance();
 
 
-function CompanyHandler() {
+function CompanyHandler(Company) {
 
     this.findById = function (id, next) {
         Company.findById(id, function (err, company) {
@@ -81,7 +82,7 @@ function CompanyHandler() {
         };
         company.primaryContact = contact;
         company.save(next);
-    };    
+    };
 }
 
 module.exports = CompanyHandler;

@@ -27,7 +27,7 @@
     "mongodb": "~1.4.29",
     "mongoose": "^4.1.9",
     "wagner-core": "0.1.0",
-    "underscore": "^1.7.0"
+    "lodash": "^4.11.0"
   },
   "devDependencies": {
     "gulp": "^3.8.8",

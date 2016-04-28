@@ -12,15 +12,15 @@ var Company = mongoose.model('Company', companySchema);
 var equipmentSchema = require('../models/equipment');
 var goodSchema = require('../models/good');
 var splitGoodsPlacementSchema = require('../models/splitGoodsPlacement');
-var exportFileSchema = require('../models/exportFile');
+//var exportFileSchema = require('../models/exportFile');
 
 var Equipment = mongoose.model('Equipment', equipmentSchema);
 var Good = mongoose.model('Good', goodSchema);
-var ExportFile = mongoose.model('ExportFile', exportFileSchema);
+//var ExportFile = mongoose.model('ExportFile', exportFileSchema);
 var SplitGoodsPlacement = mongoose.model('SplitGoodsPlacement', splitGoodsPlacementSchema);
 
 
-function ExportFileHandler() {
+function ExportFileHandler(ExportFile) {
 
 
     // {"file_owner": "WA92828", "booking_number": "BK-B6O2J1"}
@@ -240,7 +240,7 @@ function ExportFileHandler() {
                         if (err) {
                             next(err);
                         }
-                        next(exportFile);
+                        next(null, exportFile);
                     });
                 });
         });

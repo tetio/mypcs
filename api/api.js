@@ -22,15 +22,15 @@ module.exports = function(wagner) {
     });
 
 
-    api.get('/company', wagner.invoke(function(Company) {
+    api.get('/company', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
-            Company.find().exec(handleMany.bind(null, res));
+            CompanyHandler.find(handleMany.bind(null, res));
         };
     }));
-    api.post('/company', wagner.invoke(function(Company, CompanyHandler) {
+    api.post('/company', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
             if (req.body._id) {
-                Company.update({ _id: req.body._id }, req.body, { upsert: false, new: true }).exec(handleOne.bind(null, res));
+                CompanyHandler.update({ _id: req.body._id }, req.body, handleOne.bind(null, res));
             } else {
                 CompanyHandler.createCompany(handleOne.bind(null, res));
                 /* OK
@@ -44,9 +44,9 @@ module.exports = function(wagner) {
     }));
 
 
-    api.get('/company/:company_id', wagner.invoke(function(Company) {
+    api.get('/company/:company_id', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
-            Company.findOne({ '_id': req.params.company_id }).exec(handleOne.bind(null, res));
+            CompanyHandler.findById(req.params.company_id, handleOne.bind(null, res));
             // Company.find({ '_id': req.params.company_id }).exec(handleOne.bind(null, 'company', res));
         };
     }));
@@ -55,25 +55,32 @@ module.exports = function(wagner) {
 
 
     // No used
-    api.put('/company/:company_id', wagner.invoke(function(Company) {
+    api.put('/company/:company_id', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
             //CompanyHandler.update(req.params.company_id, req.body, handleOne.bind(null, 'company', res));
-            Company.update({ _id: req.params.company_id }, req.body, { upsert: true }).exec(handleOne.bind(null, res));
+            CompanyHandler.update({ _id: req.params.company_id }, req.body, handleOne.bind(null, res));
         };
     }));
 
 
     // Export Files
-    api.get('/exportfile', wagner.invoke(function(ExportFile) {
+    api.get('/exportfile', wagner.invoke(function(ExportFileHandler) {
         return function(req, res) {
-            ExportFile.find().exec(handleMany.bind(null, res));
+            ExportFileHandler.find(handleMany.bind(null, res));
         };
-    }));    
+    }));
 
-    api.get('/exportfile/:exportfile_id', wagner.invoke(function(ExportFile) {
-        return function(req, res) {
-            ExportFile.findOne({ '_id': req.params.exportfile_id }).exec(handleOne.bind(null, res));
-            // Company.find({ '_id': req.params.company_id }).exec(handleOne.bind(null, 'company', res));
+   api.get('/exportfile/:exportfile_id', wagner.invoke(function(ExportFileHandler) {
+        return function (req, res) {
+        //    ExportFile.findById(req.params.exportfile_id).exec(handleOne.bind(null, res));
+           ExportFileHandler.findById(req.params.exportfile_id, handleOne.bind(null, res));
+        };
+    }));
+
+   api.post('/exportfile/create', wagner.invoke(function(ExportFileHandler) {
+        return function (req, res) {
+        //    ExportFile.findById(req.params.exportfile_id).exec(handleOne.bind(null, res));
+           ExportFileHandler.create(handleOne.bind(null, res));
         };
     }));
 
