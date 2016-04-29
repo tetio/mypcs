@@ -88,13 +88,14 @@ function ExportFileHandler(ExportFile) {
         ef.bookingInfo.bookingNumber = payload.bookingNumber;
     };
 
-    this.addEquipment = function (exportfileId, payload, next) {
-        var objectId = new ObjectID(exportfileId);
+    this.addEquipment = function (payload, next) {
+//        var objectId = new ObjectID(exportfileId);
+        var objectId = new ObjectID(payload.exportfileId);
         var query = { _id: objectId };
         var update = { $push: { equipments: payload.equipment } };
         findAndModify(query, [], update, { 'new': true })
-            .then(function (err, exportFile) {
-                next(err, exportFile);
+            .then(function (exportFile) {
+                next(null, exportFile);
             });
     };
 

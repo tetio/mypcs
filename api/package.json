@@ -24,7 +24,7 @@
     "express": "4.12.3",
     "http-status": "0.1.8",
     "gulp-nodemon": "^2.0.3",
-    "mongodb": "~1.4.29",
+    "mongodb": "~2.1.18",
     "mongoose": "^4.1.9",
     "wagner-core": "0.1.0",
     "lodash": "^4.11.0"

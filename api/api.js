@@ -11,7 +11,7 @@ module.exports = function(wagner) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers",
             "Origin, X-Requested-With, Content-Type, Accept");
-        next(); // make sure we go to the next routes and don't stop here
+        next();
     });
 
 
@@ -33,12 +33,6 @@ module.exports = function(wagner) {
                 CompanyHandler.update({ _id: req.body._id }, req.body, handleOne.bind(null, res));
             } else {
                 CompanyHandler.createCompany(handleOne.bind(null, res));
-                /* OK
-                var company = CompanyHandler.createCompany();
-                company.save(handleOne.bind(null, res));
-                */
-                // Company.update({ _id: company._id }, company, { new: true, upsert: true}).exec(handleOne.bind(null, res));
-
             }
         };
     }));
@@ -47,7 +41,6 @@ module.exports = function(wagner) {
     api.get('/company/:company_id', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
             CompanyHandler.findById(req.params.company_id, handleOne.bind(null, res));
-            // Company.find({ '_id': req.params.company_id }).exec(handleOne.bind(null, 'company', res));
         };
     }));
 
@@ -57,7 +50,6 @@ module.exports = function(wagner) {
     // No used
     api.put('/company/:company_id', wagner.invoke(function(CompanyHandler) {
         return function(req, res) {
-            //CompanyHandler.update(req.params.company_id, req.body, handleOne.bind(null, 'company', res));
             CompanyHandler.update({ _id: req.params.company_id }, req.body, handleOne.bind(null, res));
         };
     }));
@@ -72,15 +64,19 @@ module.exports = function(wagner) {
 
    api.get('/exportfile/:exportfile_id', wagner.invoke(function(ExportFileHandler) {
         return function (req, res) {
-        //    ExportFile.findById(req.params.exportfile_id).exec(handleOne.bind(null, res));
            ExportFileHandler.findById(req.params.exportfile_id, handleOne.bind(null, res));
         };
     }));
 
    api.post('/exportfile/create', wagner.invoke(function(ExportFileHandler) {
         return function (req, res) {
-        //    ExportFile.findById(req.params.exportfile_id).exec(handleOne.bind(null, res));
            ExportFileHandler.create(handleOne.bind(null, res));
+        };
+    }));
+
+   api.post('/exportfile/equip', wagner.invoke(function(ExportFileHandler) {
+        return function (req, res) {
+           ExportFileHandler.addEquipment(req.body, handleOne.bind(null, res));
         };
     }));
 
@@ -114,7 +110,4 @@ function handleOne(res, error, result) {
     }
     res.json(result);
 }
-
-
-
 
